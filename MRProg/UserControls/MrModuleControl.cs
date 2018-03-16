@@ -47,8 +47,6 @@ namespace MRProg.UserControls
         private const string INCORRECT_FILE = "Некорректный файл";
         #endregion
 
-
-
         #region Private Fields
         private string _moduleName;
         private string _moduleVersion;
