@@ -14,8 +14,6 @@ namespace MRProg.Module
 
         private const ushort MODULE_INFO_SIZE = 24;
 
-
-
         public async Task<ModuleInformation> ReadModuleInformation(IDeviceSpecification deviceSpecification, byte devicenumber,int i)
         {
             ModuleInformation moduleInformation=new ModuleInformation();
