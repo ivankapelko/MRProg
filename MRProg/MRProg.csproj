@@ -98,6 +98,7 @@
     <Compile Include="Module\ModuleWritterController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\LoadReport.cs" />
     <Compile Include="UserControls\ModuleControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

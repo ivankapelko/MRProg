@@ -30,7 +30,8 @@ namespace MRProg.Module
                     var addingInfo = answerBytes.Skip(16).Select(o => (byte)o).Take(16).ToArray();
                      moduleInformation=new ModuleInformation(str1,addingInfo,str3,(byte)i);
                     moduleInformation.ModulePositionOnSpecification = deviceSpecification.ModuleTypes[i];
-          
+                moduleInformation.ControlType = deviceSpecification.ControlType;
+
             }
             catch (Exception e)
             {

@@ -444,6 +444,7 @@
             this._deviceNumberTextBox.UseSelectable = true;
             this._deviceNumberTextBox.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
             this._deviceNumberTextBox.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            this._deviceNumberTextBox.TextChanged += new System.EventHandler(this._deviceNumberTextBox_TextChanged);
             // 
             // metroLabel1
             // 

@@ -180,12 +180,11 @@ namespace NModbus4.Device
             return PerformReadRegistersAsync(request);
         }
 
-        public Task<byte[]> ExecuteFunction12Async(byte slaveAddress, byte moduleNumber, byte queryId,
-            byte numberOfBytes)
+        public Task<byte[]> ExecuteFunction12Async(ushort startAddress, byte devicenumber, byte moduletype, byte moduleNumber, ushort[] writeArray)
         {
             var request = new Function12Request(
                 Modbus.Function12,
-                slaveAddress, moduleNumber, queryId, numberOfBytes);
+                devicenumber, devicenumber, moduletype, moduleNumber, writeArray);
             return PerformFunction12Request(request);
         }
 
@@ -271,6 +270,8 @@ namespace NModbus4.Device
                 slaveAddress,
                 startAddress,
                 new RegisterCollection(data));
+
+           
 
             Transport.UnicastMessage<WriteMultipleRegistersResponse>(request);
         }

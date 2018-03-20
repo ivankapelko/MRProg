@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework;
 using MetroFramework.Controls;
+using MRProg.Devices;
 using MRProg.Module;
 
 namespace MRProg.UserControls
@@ -56,6 +57,8 @@ namespace MRProg.UserControls
         private ModuleStates _state;
         private ModuleInformation _moduleInformation;
         private ModuleType _type;
+        private IProgress<LoadReport> _progressBarReport;
+
 
         #endregion
 
@@ -63,6 +66,7 @@ namespace MRProg.UserControls
         public MrModuleControl()
         {
             InitializeComponent();
+            _progressBarReport = new Progress<LoadReport>(OnProgressBarChanged);
         }
         /// <summary>
         /// Название модуля
@@ -343,7 +347,7 @@ namespace MRProg.UserControls
                             this._workProgramCheckFile.Checked = false;
                             this._workProgramCheckFile.Text = string.Empty;
                         }
-                        this.groupBox1.BackColor = Color.FromArgb(165,214,167);
+                        this.groupBox1.BackColor = Color.FromArgb(165, 214, 167);
                         this.groupBox2.BackColor = Color.FromArgb(165, 214, 167);
                         this.groupBox3.BackColor = Color.FromArgb(165, 214, 167);
                         this.BackColor = Color.FromArgb(165, 214, 167);
@@ -482,9 +486,28 @@ namespace MRProg.UserControls
         {
             if (this._workProgramCheckFile.Checked)
             {
+                try
+                {
+                    ModuleWritterController moduleWritter = new ModuleWritterController(this.Information, TypeOfMemory.WORK, DevicesManager.DeviceNumber, this._data);
+                    moduleWritter.StartSave(_progressBarReport);
+                }
+                catch (Exception e)
+                {
+                    MessageErrorBox messageError=new MessageErrorBox(e.Message,"Неудалось записать файл прошивки для модуля "+ ModuleManager.ModuleTypeFriendlyName(this.Information.ModuleType));
+                }
 
             }
 
+        }
+
+        private void OnProgressBarChanged(LoadReport loadReport)
+        {
+            if (_progressBar.Maximum != loadReport.TotalProgressCount)
+            {
+                this._progressBar.Maximum = loadReport.TotalProgressCount;
+            }
+
+            this._progressBar.Value = loadReport.CurrentProgressCount;
         }
     }
 }

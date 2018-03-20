@@ -29,37 +29,42 @@
         private void InitializeComponent()
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.metroCheckBox1 = new MetroFramework.Controls.MetroCheckBox();
             this._chooseFile = new MetroFramework.Controls.MetroButton();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
-            this.metroProgressBar1 = new MetroFramework.Controls.MetroProgressBar();
+            this._progressBar = new MetroFramework.Controls.MetroProgressBar();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this._moduleNameLable = new MetroFramework.Controls.MetroLabel();
             this.metroButton2 = new MetroFramework.Controls.MetroButton();
             this.metroButton3 = new MetroFramework.Controls.MetroButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.metroButton14 = new MetroFramework.Controls.MetroButton();
             this.metroButton15 = new MetroFramework.Controls.MetroButton();
-            this.metroCheckBox2 = new MetroFramework.Controls.MetroCheckBox();
             this.metroButton4 = new MetroFramework.Controls.MetroButton();
             this.metroButton5 = new MetroFramework.Controls.MetroButton();
-            this.metroProgressBar2 = new MetroFramework.Controls.MetroProgressBar();
+            this._eepromProgressBar = new MetroFramework.Controls.MetroProgressBar();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.metroButton12 = new MetroFramework.Controls.MetroButton();
             this.metroButton13 = new MetroFramework.Controls.MetroButton();
-            this.metroCheckBox3 = new MetroFramework.Controls.MetroCheckBox();
             this.metroButton6 = new MetroFramework.Controls.MetroButton();
             this.metroButton7 = new MetroFramework.Controls.MetroButton();
-            this.metroProgressBar3 = new MetroFramework.Controls.MetroProgressBar();
+            this._relayProgressBar = new MetroFramework.Controls.MetroProgressBar();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.metroButton11 = new MetroFramework.Controls.MetroButton();
             this.metroButton10 = new MetroFramework.Controls.MetroButton();
-            this.metroCheckBox4 = new MetroFramework.Controls.MetroCheckBox();
             this.metroButton8 = new MetroFramework.Controls.MetroButton();
             this.metroButton9 = new MetroFramework.Controls.MetroButton();
-            this.metroProgressBar4 = new MetroFramework.Controls.MetroProgressBar();
+            this._flashbootProgressBar = new MetroFramework.Controls.MetroProgressBar();
+            this._versionLable = new System.Windows.Forms.Label();
+            this._fuzeLable = new System.Windows.Forms.Label();
+            this._openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this._workProgramCheckBox = new System.Windows.Forms.CheckBox();
+            this._eepromCheckBox = new System.Windows.Forms.CheckBox();
+            this._relayDiscretCheckBox = new System.Windows.Forms.CheckBox();
+            this._flashCheckBox = new System.Windows.Forms.CheckBox();
+            this._moduleNameLable = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -70,27 +75,17 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox3.BackColor = System.Drawing.Color.White;
-            this.groupBox3.Controls.Add(this.metroCheckBox1);
+            this.groupBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox3.Controls.Add(this._workProgramCheckBox);
             this.groupBox3.Controls.Add(this._chooseFile);
             this.groupBox3.Controls.Add(this.metroButton1);
-            this.groupBox3.Controls.Add(this.metroProgressBar1);
+            this.groupBox3.Controls.Add(this._progressBar);
             this.groupBox3.Location = new System.Drawing.Point(203, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(643, 78);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Рабочая программа";
-            // 
-            // metroCheckBox1
-            // 
-            this.metroCheckBox1.AutoSize = true;
-            this.metroCheckBox1.Location = new System.Drawing.Point(154, 23);
-            this.metroCheckBox1.MinimumSize = new System.Drawing.Size(5, 14);
-            this.metroCheckBox1.Name = "metroCheckBox1";
-            this.metroCheckBox1.Size = new System.Drawing.Size(16, 14);
-            this.metroCheckBox1.TabIndex = 3;
-            this.metroCheckBox1.UseSelectable = true;
             // 
             // _chooseFile
             // 
@@ -111,19 +106,20 @@
             this.metroButton1.Text = "С";
             this.metroButton1.UseSelectable = true;
             // 
-            // metroProgressBar1
+            // _progressBar
             // 
-            this.metroProgressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroProgressBar1.Location = new System.Drawing.Point(7, 48);
-            this.metroProgressBar1.Name = "metroProgressBar1";
-            this.metroProgressBar1.Size = new System.Drawing.Size(600, 23);
-            this.metroProgressBar1.TabIndex = 0;
+            this._progressBar.Location = new System.Drawing.Point(7, 48);
+            this._progressBar.Name = "_progressBar";
+            this._progressBar.Size = new System.Drawing.Size(600, 23);
+            this._progressBar.TabIndex = 0;
             // 
             // groupBox2
             // 
             this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox2.BackColor = System.Drawing.Color.White;
+            this.groupBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox2.Controls.Add(this._fuzeLable);
             this.groupBox2.Location = new System.Drawing.Point(71, 22);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(126, 50);
@@ -134,25 +130,14 @@
             // groupBox1
             // 
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox1.BackColor = System.Drawing.Color.White;
+            this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox1.Controls.Add(this._versionLable);
             this.groupBox1.Location = new System.Drawing.Point(1, 22);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(64, 50);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Версия";
-            // 
-            // _moduleNameLable
-            // 
-            this._moduleNameLable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._moduleNameLable.AutoSize = true;
-            this._moduleNameLable.Location = new System.Drawing.Point(1, 0);
-            this._moduleNameLable.Name = "_moduleNameLable";
-            this._moduleNameLable.Size = new System.Drawing.Size(144, 19);
-            this._moduleNameLable.TabIndex = 3;
-            this._moduleNameLable.Text = "Модуль не определен";
             // 
             // metroButton2
             // 
@@ -177,13 +162,13 @@
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox4.BackColor = System.Drawing.Color.White;
+            this.groupBox4.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox4.Controls.Add(this._eepromCheckBox);
             this.groupBox4.Controls.Add(this.metroButton14);
             this.groupBox4.Controls.Add(this.metroButton15);
-            this.groupBox4.Controls.Add(this.metroCheckBox2);
             this.groupBox4.Controls.Add(this.metroButton4);
             this.groupBox4.Controls.Add(this.metroButton5);
-            this.groupBox4.Controls.Add(this.metroProgressBar2);
+            this.groupBox4.Controls.Add(this._eepromProgressBar);
             this.groupBox4.Location = new System.Drawing.Point(203, 87);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(643, 91);
@@ -211,16 +196,6 @@
             this.metroButton15.Text = "Прочитать из устр.";
             this.metroButton15.UseSelectable = true;
             // 
-            // metroCheckBox2
-            // 
-            this.metroCheckBox2.AutoSize = true;
-            this.metroCheckBox2.Location = new System.Drawing.Point(154, 35);
-            this.metroCheckBox2.MinimumSize = new System.Drawing.Size(5, 14);
-            this.metroCheckBox2.Name = "metroCheckBox2";
-            this.metroCheckBox2.Size = new System.Drawing.Size(16, 14);
-            this.metroCheckBox2.TabIndex = 3;
-            this.metroCheckBox2.UseSelectable = true;
-            // 
             // metroButton4
             // 
             this.metroButton4.Location = new System.Drawing.Point(7, 31);
@@ -240,27 +215,27 @@
             this.metroButton5.Text = "С";
             this.metroButton5.UseSelectable = true;
             // 
-            // metroProgressBar2
+            // _eepromProgressBar
             // 
-            this.metroProgressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._eepromProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroProgressBar2.Location = new System.Drawing.Point(7, 60);
-            this.metroProgressBar2.Name = "metroProgressBar2";
-            this.metroProgressBar2.Size = new System.Drawing.Size(600, 23);
-            this.metroProgressBar2.TabIndex = 0;
+            this._eepromProgressBar.Location = new System.Drawing.Point(7, 60);
+            this._eepromProgressBar.Name = "_eepromProgressBar";
+            this._eepromProgressBar.Size = new System.Drawing.Size(600, 23);
+            this._eepromProgressBar.TabIndex = 0;
             // 
             // groupBox5
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox5.BackColor = System.Drawing.Color.White;
+            this.groupBox5.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox5.Controls.Add(this._relayDiscretCheckBox);
             this.groupBox5.Controls.Add(this.metroButton12);
             this.groupBox5.Controls.Add(this.metroButton13);
-            this.groupBox5.Controls.Add(this.metroCheckBox3);
             this.groupBox5.Controls.Add(this.metroButton6);
             this.groupBox5.Controls.Add(this.metroButton7);
-            this.groupBox5.Controls.Add(this.metroProgressBar3);
+            this.groupBox5.Controls.Add(this._relayProgressBar);
             this.groupBox5.Location = new System.Drawing.Point(203, 185);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(643, 91);
@@ -288,16 +263,6 @@
             this.metroButton13.Text = "Прочитать из устр.";
             this.metroButton13.UseSelectable = true;
             // 
-            // metroCheckBox3
-            // 
-            this.metroCheckBox3.AutoSize = true;
-            this.metroCheckBox3.Location = new System.Drawing.Point(154, 36);
-            this.metroCheckBox3.MinimumSize = new System.Drawing.Size(5, 14);
-            this.metroCheckBox3.Name = "metroCheckBox3";
-            this.metroCheckBox3.Size = new System.Drawing.Size(16, 14);
-            this.metroCheckBox3.TabIndex = 3;
-            this.metroCheckBox3.UseSelectable = true;
-            // 
             // metroButton6
             // 
             this.metroButton6.Location = new System.Drawing.Point(7, 32);
@@ -317,27 +282,27 @@
             this.metroButton7.Text = "С";
             this.metroButton7.UseSelectable = true;
             // 
-            // metroProgressBar3
+            // _relayProgressBar
             // 
-            this.metroProgressBar3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._relayProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroProgressBar3.Location = new System.Drawing.Point(7, 61);
-            this.metroProgressBar3.Name = "metroProgressBar3";
-            this.metroProgressBar3.Size = new System.Drawing.Size(600, 23);
-            this.metroProgressBar3.TabIndex = 0;
+            this._relayProgressBar.Location = new System.Drawing.Point(7, 61);
+            this._relayProgressBar.Name = "_relayProgressBar";
+            this._relayProgressBar.Size = new System.Drawing.Size(600, 23);
+            this._relayProgressBar.TabIndex = 0;
             // 
             // groupBox6
             // 
             this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox6.BackColor = System.Drawing.Color.White;
+            this.groupBox6.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox6.Controls.Add(this._flashCheckBox);
             this.groupBox6.Controls.Add(this.metroButton11);
             this.groupBox6.Controls.Add(this.metroButton10);
-            this.groupBox6.Controls.Add(this.metroCheckBox4);
             this.groupBox6.Controls.Add(this.metroButton8);
             this.groupBox6.Controls.Add(this.metroButton9);
-            this.groupBox6.Controls.Add(this.metroProgressBar4);
+            this.groupBox6.Controls.Add(this._flashbootProgressBar);
             this.groupBox6.Location = new System.Drawing.Point(203, 282);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(643, 95);
@@ -365,16 +330,6 @@
             this.metroButton10.Text = "Прочитать из устр.";
             this.metroButton10.UseSelectable = true;
             // 
-            // metroCheckBox4
-            // 
-            this.metroCheckBox4.AutoSize = true;
-            this.metroCheckBox4.Location = new System.Drawing.Point(154, 23);
-            this.metroCheckBox4.MinimumSize = new System.Drawing.Size(5, 14);
-            this.metroCheckBox4.Name = "metroCheckBox4";
-            this.metroCheckBox4.Size = new System.Drawing.Size(16, 14);
-            this.metroCheckBox4.TabIndex = 3;
-            this.metroCheckBox4.UseSelectable = true;
-            // 
             // metroButton8
             // 
             this.metroButton8.Location = new System.Drawing.Point(7, 19);
@@ -394,14 +349,81 @@
             this.metroButton9.Text = "С";
             this.metroButton9.UseSelectable = true;
             // 
-            // metroProgressBar4
+            // _flashbootProgressBar
             // 
-            this.metroProgressBar4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._flashbootProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroProgressBar4.Location = new System.Drawing.Point(7, 67);
-            this.metroProgressBar4.Name = "metroProgressBar4";
-            this.metroProgressBar4.Size = new System.Drawing.Size(600, 23);
-            this.metroProgressBar4.TabIndex = 0;
+            this._flashbootProgressBar.Location = new System.Drawing.Point(7, 67);
+            this._flashbootProgressBar.Name = "_flashbootProgressBar";
+            this._flashbootProgressBar.Size = new System.Drawing.Size(600, 23);
+            this._flashbootProgressBar.TabIndex = 0;
+            // 
+            // _versionLable
+            // 
+            this._versionLable.AutoSize = true;
+            this._versionLable.Location = new System.Drawing.Point(13, 22);
+            this._versionLable.Name = "_versionLable";
+            this._versionLable.Size = new System.Drawing.Size(22, 13);
+            this._versionLable.TabIndex = 0;
+            this._versionLable.Text = "ver";
+            // 
+            // _fuzeLable
+            // 
+            this._fuzeLable.AutoSize = true;
+            this._fuzeLable.Location = new System.Drawing.Point(39, 23);
+            this._fuzeLable.Name = "_fuzeLable";
+            this._fuzeLable.Size = new System.Drawing.Size(27, 13);
+            this._fuzeLable.TabIndex = 0;
+            this._fuzeLable.Text = "fuze";
+            // 
+            // _openFileDialog
+            // 
+            this._openFileDialog.FileName = "openFileDialog1";
+            // 
+            // _workProgramCheckBox
+            // 
+            this._workProgramCheckBox.AutoSize = true;
+            this._workProgramCheckBox.Location = new System.Drawing.Point(155, 22);
+            this._workProgramCheckBox.Name = "_workProgramCheckBox";
+            this._workProgramCheckBox.Size = new System.Drawing.Size(15, 14);
+            this._workProgramCheckBox.TabIndex = 3;
+            this._workProgramCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // _eepromCheckBox
+            // 
+            this._eepromCheckBox.AutoSize = true;
+            this._eepromCheckBox.Location = new System.Drawing.Point(155, 34);
+            this._eepromCheckBox.Name = "_eepromCheckBox";
+            this._eepromCheckBox.Size = new System.Drawing.Size(15, 14);
+            this._eepromCheckBox.TabIndex = 10;
+            this._eepromCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // _relayDiscretCheckBox
+            // 
+            this._relayDiscretCheckBox.AutoSize = true;
+            this._relayDiscretCheckBox.Location = new System.Drawing.Point(155, 36);
+            this._relayDiscretCheckBox.Name = "_relayDiscretCheckBox";
+            this._relayDiscretCheckBox.Size = new System.Drawing.Size(15, 14);
+            this._relayDiscretCheckBox.TabIndex = 11;
+            this._relayDiscretCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // _flashCheckBox
+            // 
+            this._flashCheckBox.AutoSize = true;
+            this._flashCheckBox.Location = new System.Drawing.Point(155, 22);
+            this._flashCheckBox.Name = "_flashCheckBox";
+            this._flashCheckBox.Size = new System.Drawing.Size(15, 14);
+            this._flashCheckBox.TabIndex = 12;
+            this._flashCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // _moduleNameLable
+            // 
+            this._moduleNameLable.AutoSize = true;
+            this._moduleNameLable.Location = new System.Drawing.Point(3, 3);
+            this._moduleNameLable.Name = "_moduleNameLable";
+            this._moduleNameLable.Size = new System.Drawing.Size(117, 13);
+            this._moduleNameLable.TabIndex = 13;
+            this._moduleNameLable.Text = "Модуль не определен";
             // 
             // ModuleControl
             // 
@@ -409,6 +431,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this._moduleNameLable);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -417,11 +440,14 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this._moduleNameLable);
             this.Name = "ModuleControl";
             this.Size = new System.Drawing.Size(853, 387);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -436,35 +462,38 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox3;
-        private MetroFramework.Controls.MetroCheckBox metroCheckBox1;
         private MetroFramework.Controls.MetroButton _chooseFile;
         private MetroFramework.Controls.MetroButton metroButton1;
-        private MetroFramework.Controls.MetroProgressBar metroProgressBar1;
+        private MetroFramework.Controls.MetroProgressBar _progressBar;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private MetroFramework.Controls.MetroLabel _moduleNameLable;
         private MetroFramework.Controls.MetroButton metroButton2;
         private MetroFramework.Controls.MetroButton metroButton3;
         private System.Windows.Forms.GroupBox groupBox4;
-        private MetroFramework.Controls.MetroCheckBox metroCheckBox2;
         private MetroFramework.Controls.MetroButton metroButton4;
         private MetroFramework.Controls.MetroButton metroButton5;
-        private MetroFramework.Controls.MetroProgressBar metroProgressBar2;
+        private MetroFramework.Controls.MetroProgressBar _eepromProgressBar;
         private System.Windows.Forms.GroupBox groupBox5;
-        private MetroFramework.Controls.MetroCheckBox metroCheckBox3;
         private MetroFramework.Controls.MetroButton metroButton6;
         private MetroFramework.Controls.MetroButton metroButton7;
-        private MetroFramework.Controls.MetroProgressBar metroProgressBar3;
+        private MetroFramework.Controls.MetroProgressBar _relayProgressBar;
         private System.Windows.Forms.GroupBox groupBox6;
-        private MetroFramework.Controls.MetroCheckBox metroCheckBox4;
         private MetroFramework.Controls.MetroButton metroButton8;
         private MetroFramework.Controls.MetroButton metroButton9;
-        private MetroFramework.Controls.MetroProgressBar metroProgressBar4;
+        private MetroFramework.Controls.MetroProgressBar _flashbootProgressBar;
         private MetroFramework.Controls.MetroButton metroButton14;
         private MetroFramework.Controls.MetroButton metroButton15;
         private MetroFramework.Controls.MetroButton metroButton12;
         private MetroFramework.Controls.MetroButton metroButton13;
         private MetroFramework.Controls.MetroButton metroButton11;
         private MetroFramework.Controls.MetroButton metroButton10;
+        private System.Windows.Forms.Label _fuzeLable;
+        private System.Windows.Forms.Label _versionLable;
+        private System.Windows.Forms.OpenFileDialog _openFileDialog;
+        private System.Windows.Forms.CheckBox _workProgramCheckBox;
+        private System.Windows.Forms.CheckBox _eepromCheckBox;
+        private System.Windows.Forms.CheckBox _relayDiscretCheckBox;
+        private System.Windows.Forms.CheckBox _flashCheckBox;
+        private System.Windows.Forms.Label _moduleNameLable;
     }
 }

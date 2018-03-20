@@ -27,4 +27,12 @@ namespace MRProg.Connection.Enum
         READ_WORDS = 0x04,
         WRITE_WORDS = 0x10
     }
+
+
+    [Flags]
+    public enum Func
+    {
+        WRITE = 0x01,
+        READ = 0x02
+    }
 }

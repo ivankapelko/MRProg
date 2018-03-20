@@ -33,6 +33,35 @@ namespace MRProg.Connection
                 Progress?.Report(_queryReport);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceNum">Номер устройства</param>
+        /// <param name="startAddress">Стартовый адрес</param>
+        /// <param name="moduletype">Тип модуля</param>
+        /// <param name="moduleposition">Позиция модуля</param>
+        /// <param name="writeArray">Данные для записи</param>
+        /// <param name="queryName">Наименование запроса</param>
+        /// <returns></returns>
+        public async Task WriteMultipleRegistersAsyncFunction12(byte deviceNum, ushort startAddress, byte moduletype,byte moduleposition,ushort[] writeArray, string queryName)
+        {
+            try
+            {
+                Logger.AddToFile(String.Format("Запрос {0} по адресу {1} ", queryName, startAddress), writeArray.ToArray());
+                await ModbusMaster.ExecuteFunction12Async( startAddress,deviceNum,moduletype,moduleposition, writeArray);
+                _queryReport.IsSuccess = true;
+            }
+            catch (Exception e)
+            {
+                _queryReport.IsSuccess = false;
+                Logger.AddToFile(String.Format("Запрос {0}: по адресу {1} выдал ошибку: {2}", queryName, startAddress, e.Message));
+                throw;
+            }
+            finally
+            {
+                Progress?.Report(_queryReport);
+            }
+        }
 
         public async Task<ushort[]> ReadHoldingRegistersAsync(byte deviceNum, ushort startAddress, ushort numOfPoints, string queryName)
         {

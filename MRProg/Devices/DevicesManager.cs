@@ -15,9 +15,11 @@ namespace MRProg.Devices
         private string _fullVersion=String.Empty;
         private string _versionNumber=String.Empty;
         private IDeviceSpecification _currentDeviceSpecification;
+        public static byte _deviceNumber;
 
         public DevicesManager()
         {
+            
             AvailableDeviceSpecifications = new List<IDeviceSpecification>()
             {
                 new MiiDeviceSpecification(),
@@ -206,6 +208,10 @@ namespace MRProg.Devices
             get { return _versionNumber; }
         }
 
-        
+        public static byte DeviceNumber
+        {
+            get { return _deviceNumber; }
+            set { _deviceNumber = value; }
+        }
     }
 }

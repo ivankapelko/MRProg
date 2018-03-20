@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace MRProg.UserControls
 {
     /// <summary>
@@ -65,5 +67,13 @@ namespace MRProg.UserControls
     {
         MLKTYPE=0,
         MRTYPE
+    }
+    [Flags]
+    public enum TypeOfMemory
+    {
+        WORK,
+        EEPROM = 0x10,
+        BOOT_FLASH = 0x20,
+        RALAY_DISCRET = 0x30
     }
 }

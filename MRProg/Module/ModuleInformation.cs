@@ -35,7 +35,7 @@ namespace MRProg.Module
         /// </summary>
         public byte ModulePosition { get; private set; }
 
-
+        public ControlType ControlType { get; set; }
         /// <summary>
         /// Какой модуль должен стоять в этой позиции согласно спецификации
         /// </summary>

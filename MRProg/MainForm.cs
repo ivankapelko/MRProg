@@ -37,6 +37,7 @@ namespace MRProg
             InitializeComponent();
             SetVersionInformation();
             _deiceManager=new DevicesManager();
+            DevicesManager.DeviceNumber = Convert.ToByte(_deviceNumberTextBox.Text);
             _moduleManager=new ModuleManager();
             _queryProgress = new Progress<QueryReport>(OnQueryProgressChanged);
             ConnectionManager.Progress = _queryProgress;
@@ -92,10 +93,12 @@ namespace MRProg
         }
 
 
-        private void SetModuleControl()
+        private async void SetModuleControl()
         {
             _panelControl.Controls.Clear();
             ModuleControl control=new ModuleControl();
+            ModuleInformation moduleInformation = await _moduleManager.ReadModuleInformation(_deviceSpecification, Convert.ToByte(_deviceNumberTextBox.Text), 0);
+            control.Information = moduleInformation;
             control.Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top);
             control.TypeModule = _deviceSpecification.ModuleTypes[0];
             _panelControl.Controls.Add(control);
@@ -164,5 +167,9 @@ namespace MRProg
             }
         }
 
+        private void _deviceNumberTextBox_TextChanged(object sender, EventArgs e)
+        {
+            DevicesManager.DeviceNumber = Convert.ToByte(_deviceNumberTextBox.Text);
+        }
     }
 }
