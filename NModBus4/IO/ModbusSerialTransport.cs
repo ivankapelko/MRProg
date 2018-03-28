@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using NModbus4.Message;
+using NModBus4.Message;
+using NModBus4.Message.Function12;
 
 namespace NModbus4.IO
 {
@@ -60,7 +63,26 @@ namespace NModbus4.IO
 
         internal override void OnValidateResponse(IModbusMessage request, IModbusMessage response)
         {
-            // no-op
+            if (request.FunctionCode == Modbus.Function12)
+            {
+                if (/*request.MessageFrame[4] == Modbus.WriteMultipleRegisters*/request is Function12RequestWrite)
+                {
+                    byte[] innerResponse = new byte[8];
+                    Array.ConstrainedCopy(response.MessageFrame, 4, innerResponse, 0, innerResponse.Length);
+                    CreateResponse<WriteMultipleRegistersResponse>(innerResponse);
+                }
+                if (/*request.MessageFrame[4] == Modbus.ReadHoldingRegisters*/ request is Function12RequestRead)
+                {
+                    
+
+                    int countinnerbyte = response.MessageFrame[6];
+                    byte[] innerResponse = new byte[countinnerbyte+5];
+                    Array.ConstrainedCopy(response.MessageFrame, 4, innerResponse, 0, innerResponse.Length);
+                    CreateResponse<ReadHoldingInputRegistersResponse>(innerResponse);
+                }
+
+
+            }
         }
     }
 }

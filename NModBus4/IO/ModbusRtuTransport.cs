@@ -78,6 +78,12 @@ namespace NModbus4.IO
                 case Modbus.Diagnostics:
                     numBytes = 4;
                     break;
+                case Modbus.Function12:
+                {
+                    numBytes = frameStart[3]+2;
+                    break;
+                }
+
                 default:
                     string msg = $"Function code {functionCode} not supported.";
                     Debug.WriteLine(msg);
@@ -122,10 +128,16 @@ namespace NModbus4.IO
         {
             byte[] frameStart = Read(ResponseFrameStartLength);
             byte[] frameEnd = Read(ResponseBytesToRead(frameStart));
+            //if (frameStart[1] == Modbus.Function12)
+            //{
+            //    Debug.WriteLine($"RX: {string.Join(", ", frameEnd)}");
+            //    return CreateResponse<T>(frameEnd);
+            //    }
+
             byte[] frame = Enumerable.Concat(frameStart, frameEnd).ToArray();
             Debug.WriteLine($"RX: {string.Join(", ", frame)}");
-
             return CreateResponse<T>(frame);
+
         }
 
         internal override byte[] ReadRequest()

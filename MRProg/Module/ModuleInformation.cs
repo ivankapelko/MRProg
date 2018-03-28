@@ -45,7 +45,7 @@ namespace MRProg.Module
             set
             {
                 _modulepositionOnSpecification = value;
-                if (State != ModuleStates.ERROR_READ_MODULE)
+                if (State != ModuleStates.ERROR_READ_MODULE && State != ModuleStates.LOADER)
                 {
                     if (_modulepositionOnSpecification != this.ModuleType)
                     {

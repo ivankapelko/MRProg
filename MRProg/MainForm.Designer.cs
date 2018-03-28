@@ -118,7 +118,7 @@
             // 
             this.metroButton2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroButton2.Location = new System.Drawing.Point(6, 362);
+            this.metroButton2.Location = new System.Drawing.Point(6, 363);
             this.metroButton2.Name = "metroButton2";
             this.metroButton2.Size = new System.Drawing.Size(328, 23);
             this.metroButton2.TabIndex = 5;
@@ -201,7 +201,7 @@
             // 
             this._writeToDeviceButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._writeToDeviceButton.Location = new System.Drawing.Point(6, 391);
+            this._writeToDeviceButton.Location = new System.Drawing.Point(6, 392);
             this._writeToDeviceButton.Name = "_writeToDeviceButton";
             this._writeToDeviceButton.Size = new System.Drawing.Size(328, 23);
             this._writeToDeviceButton.TabIndex = 4;
@@ -385,7 +385,7 @@
             // 
             // _configurationButton
             // 
-            this._configurationButton.Location = new System.Drawing.Point(96, 22);
+            this._configurationButton.Location = new System.Drawing.Point(20, 19);
             this._configurationButton.Name = "_configurationButton";
             this._configurationButton.Size = new System.Drawing.Size(97, 34);
             this._configurationButton.TabIndex = 1;
@@ -395,7 +395,7 @@
             // 
             // _connectButton
             // 
-            this._connectButton.Location = new System.Drawing.Point(208, 22);
+            this._connectButton.Location = new System.Drawing.Point(123, 19);
             this._connectButton.Name = "_connectButton";
             this._connectButton.Size = new System.Drawing.Size(97, 34);
             this._connectButton.TabIndex = 2;
@@ -406,7 +406,7 @@
             // _comportLable
             // 
             this._comportLable.AutoSize = true;
-            this._comportLable.Location = new System.Drawing.Point(25, 31);
+            this._comportLable.Location = new System.Drawing.Point(707, 30);
             this._comportLable.Name = "_comportLable";
             this._comportLable.Size = new System.Drawing.Size(48, 19);
             this._comportLable.TabIndex = 3;
@@ -428,7 +428,7 @@
             this._deviceNumberTextBox.CustomButton.Visible = false;
             this._deviceNumberTextBox.Lines = new string[] {
         "1"};
-            this._deviceNumberTextBox.Location = new System.Drawing.Point(412, 31);
+            this._deviceNumberTextBox.Location = new System.Drawing.Point(665, 30);
             this._deviceNumberTextBox.MaxLength = 32767;
             this._deviceNumberTextBox.Name = "_deviceNumberTextBox";
             this._deviceNumberTextBox.PasswordChar = '\0';
@@ -449,7 +449,7 @@
             // metroLabel1
             // 
             this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(311, 31);
+            this.metroLabel1.Location = new System.Drawing.Point(564, 30);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(95, 19);
             this.metroLabel1.TabIndex = 5;

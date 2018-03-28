@@ -44,6 +44,7 @@ namespace NModbus4.Message
         {
             get
             {
+
                 var pdu = ProtocolDataUnit;
                 var frame = new MemoryStream(1 + pdu.Length);
 
@@ -57,13 +58,15 @@ namespace NModbus4.Message
 
 
         public byte[] CustomBytesInRequest { get; set; }
+        public byte[] CustomBytesInResponse { get; set; }
 
         public byte[] ProtocolDataUnit
         {
             get
             {
                 List<byte> pdu = new List<byte>();
-
+                 
+                
                 pdu.Add(FunctionCode);
 
                 if (ExceptionCode.HasValue)
@@ -98,6 +101,10 @@ namespace NModbus4.Message
                 if (CustomBytesInRequest != null)
                 {
                     pdu.AddRange(CustomBytesInRequest);
+                }
+                if(CustomBytesInResponse != null)
+                {
+                    pdu.AddRange(CustomBytesInResponse);
                 }
                 return pdu.ToArray();
             }

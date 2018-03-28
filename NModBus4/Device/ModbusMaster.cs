@@ -180,31 +180,45 @@ namespace NModbus4.Device
             return PerformReadRegistersAsync(request);
         }
 
-        public Task<byte[]> ExecuteFunction12Async(ushort startAddress, byte devicenumber, byte moduletype, byte moduleNumber, ushort[] writeArray)
+        public Task<byte[]> ExecuteFunction12WriteAsync(ushort startAddress, byte devicenumber, byte moduleNumber, ushort[] writeArray)
         {
-            var request = new Function12Request(
+            var request = new Function12RequestWrite(
                 Modbus.Function12,
-                devicenumber, devicenumber, moduletype, moduleNumber, writeArray);
-            return PerformFunction12Request(request);
+                startAddress, devicenumber, moduleNumber, writeArray);
+            return PerformFunction12RequestWrite(request);
         }
 
-        private async Task<byte[]> PerformFunction12Request(Function12Request request)
+        private async Task<byte[]> PerformFunction12RequestWrite(Function12RequestWrite request)
         {
-            Function12Response response = null;
+            Function12ResponseWrite response = null;
             await Task.Factory.StartNew((() =>
              {
-                 response = Transport.UnicastMessage<Function12Response>(request);
+                 response = Transport.UnicastMessage<Function12ResponseWrite>(request);
              }));
             return response?.BytesResult.ToArray();
         }
 
+
+        public Task<ushort[]> ExecuteFunction12ReadAsync(ushort startAddress,ushort numberOfPoints, byte devicenumber, byte moduleNumber)
+        {
+            var request = new Function12RequestRead(
+                Modbus.Function12,
+                startAddress,numberOfPoints, devicenumber, moduleNumber);
+            return PerformFunction12RequestRead(request);
+        }
+
+        private Task<ushort[]> PerformFunction12RequestRead(Function12RequestRead request)
+        {
+            return Task.Factory.StartNew(() => PerformReadRegistersFunction12(request));
+        }
+
         /// <summary>
-        ///    Writes a single coil value.
-        /// </summary>
-        /// <param name="slaveAddress">Address of the device to write to.</param>
-        /// <param name="coilAddress">Address to write value to.</param>
-        /// <param name="value">Value to write.</param>
-        public void WriteSingleCoil(byte slaveAddress, ushort coilAddress, bool value)
+            ///    Writes a single coil value.
+            /// </summary>
+            /// <param name="slaveAddress">Address of the device to write to.</param>
+            /// <param name="coilAddress">Address to write value to.</param>
+            /// <param name="value">Value to write.</param>
+            public void WriteSingleCoil(byte slaveAddress, ushort coilAddress, bool value)
         {
             var request = new WriteSingleCoilRequestResponse(slaveAddress, coilAddress, value);
             Transport.UnicastMessage<WriteSingleCoilRequestResponse>(request);
@@ -444,6 +458,13 @@ namespace NModbus4.Device
                 Transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
 
             return response.Data.Take(request.NumberOfPoints).ToArray();
+        }
+        private ushort[] PerformReadRegistersFunction12(Function12RequestRead request)
+        {
+            Function12ResponseRead response =
+                Transport.UnicastMessage<Function12ResponseRead>(request);
+
+            return response.InnerData.Take(response.ByteInnerCount).ToArray();
         }
 
         private Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)

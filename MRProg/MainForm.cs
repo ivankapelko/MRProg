@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework.Forms;
@@ -29,16 +30,18 @@ namespace MRProg
         private DevicesManager _deiceManager;
         private ModuleManager _moduleManager;
         private IDeviceSpecification _deviceSpecification;
-
+        private CancellationTokenSource _cancellationTokenSource;
+        private WriteButtonState _writeButtonState;
 
         public MainForm()
         {
 
             InitializeComponent();
             SetVersionInformation();
-            _deiceManager=new DevicesManager();
+            _writeButtonState = WriteButtonState.WRITE;
+            _deiceManager = new DevicesManager();
             DevicesManager.DeviceNumber = Convert.ToByte(_deviceNumberTextBox.Text);
-            _moduleManager=new ModuleManager();
+            _moduleManager = new ModuleManager();
             _queryProgress = new Progress<QueryReport>(OnQueryProgressChanged);
             ConnectionManager.Progress = _queryProgress;
         }
@@ -46,21 +49,22 @@ namespace MRProg
         private void _configurationButton_Click(object sender, EventArgs e)
         {
             comPortConfiguration.ShowConfiguration();
-            _comportLable.Text = "COM"+ConnectionManager.SelectedPort;
+            _comportLable.Text = "COM" + ConnectionManager.SelectedPort;
         }
 
         private async void _connectButton_Click(object sender, EventArgs e)
         {
+            _panelControl.Controls.Clear();
             ConnectionManager.Connection = new ComConnection(Convert.ToByte(ConnectionManager.SelectedPort));
             if (ConnectionManager.Connection.TryOpenConnection())
             {
                 try
                 {
-                     _deviceSpecification= await _deiceManager.IdentifyDevice(Convert.ToByte(_deviceNumberTextBox.Text));
+                    _deviceSpecification = await _deiceManager.IdentifyDevice(Convert.ToByte(_deviceNumberTextBox.Text));
                 }
                 catch (Exception exception)
                 {
-                    MessageErrorBox message=new MessageErrorBox(exception.Message,"Не удолось подключиться к устройству");
+                    MessageErrorBox message = new MessageErrorBox(exception.Message, "Не удолось подключиться к устройству");
                     message.ShowErrorMessageForm();
                     return;
                 }
@@ -68,43 +72,52 @@ namespace MRProg
                 {
                     if (_deiceManager.GetdeviceName != String.Empty)
                     {
-                        MessageBox.Show(String.Format("Работа с {0} невозможна",_deiceManager.GetdeviceName));
+                        MessageBox.Show(String.Format("Работа с {0} невозможна", _deiceManager.GetdeviceName));
                     }
                     else
                     {
                         MessageBox.Show("Работа с подключенным устройством невозможна");
                     }
-                    
+
                 }
 
                 else
                 {
-                    if (_deviceSpecification.ControlType == ControlType.MLKTYPE)
-                    {
-                        SetModuleControl();
-                    }
-                    else
-                    {
-                        SetMrModuleControl();
-                    }
+                    await SetControl();
                 }
-              
+
             }
         }
 
+        private async Task SetControl()
+        {
+            if (_deviceSpecification.ControlType == ControlType.MLKTYPE)
+            {
+                SetModuleControl();
+            }
+            else
+            {
+                await SetMrModuleControl();
+            }
+        }
 
         private async void SetModuleControl()
         {
             _panelControl.Controls.Clear();
-            ModuleControl control=new ModuleControl();
+            ModuleControl control = new ModuleControl();
             ModuleInformation moduleInformation = await _moduleManager.ReadModuleInformation(_deviceSpecification, Convert.ToByte(_deviceNumberTextBox.Text), 0);
             control.Information = moduleInformation;
             control.Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top);
+            control.Dock = DockStyle.Top;
             control.TypeModule = _deviceSpecification.ModuleTypes[0];
+            (control as IModuleControlInerface).NeedRefreshAction += (i) =>
+            {
+                RefreshModule(i);
+            };
             _panelControl.Controls.Add(control);
         }
 
-        private async void SetMrModuleControl()
+        private async Task SetMrModuleControl()
         {
             _panelControl.Controls.Clear();
             int y = 0;
@@ -121,18 +134,46 @@ namespace MRProg
                     control.Width = _panelControl.Width;
                     _panelControl.Controls.Add(control);
                     y = y + control.Height;
+                    (control as IModuleControlInerface).NeedRefreshAction += (j) =>
+                    {
+                        RefreshModule(j);
+                    };
                 }
             }
             catch (Exception e)
             {
-                MessageErrorBox message=new MessageErrorBox(e.Message,"Не удалось прочитать информацию о модулях");
+                MessageErrorBox message = new MessageErrorBox(e.Message, "Не удалось прочитать информацию о модулях");
                 message.ShowErrorMessageForm();
             }
-          
+        }
+
+        private async Task RefreshModule(int modulenumber)
+        {
+            try
+            {
+                ModuleInformation moduleInformation = await _moduleManager.ReadModuleInformation(_deviceSpecification,
+                    Convert.ToByte(_deviceNumberTextBox.Text), modulenumber);
+                if (_deviceSpecification.ControlType == ControlType.MRTYPE)
+                {
+                    MrModuleControl control = _panelControl.Controls[modulenumber] as MrModuleControl;
+                    control.Information = moduleInformation;
+                }
+                else
+                {
+                    ModuleControl control = _panelControl.Controls[modulenumber] as ModuleControl;
+                    control.Information = moduleInformation;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageErrorBox message = new MessageErrorBox(e.Message, "Не удалось прочитать информацию о модуле");
+                message.ShowErrorMessageForm();
+                _panelControl.Controls.Remove(_panelControl.Controls[modulenumber]);
+            }
+
 
         }
 
-      
         private void OnQueryProgressChanged(QueryReport report)
         {
             _statisticBox.Lines = new[]
@@ -143,33 +184,97 @@ namespace MRProg
             };
         }
 
-        public void SetVersionInformation ()
+        public void SetVersionInformation()
         {
             FileInfo f = new FileInfo(Application.ExecutablePath);
             _statisticBox.Text = "MRProg от " + f.LastWriteTime.ToString().Split(' ')[0];
         }
 
-        private void _writeToDeviceButton_Click(object sender, EventArgs e)
+        private async void _writeToDeviceButton_Click(object sender, EventArgs e)
         {
-            WriteToDevice();
+            if (_writeButtonState == WriteButtonState.WRITE)
+            {
+                _writeToDeviceButton.Text = "Остановить запись";
+                await WriteToDevice();
+            }
+            if (_writeButtonState == WriteButtonState.STOP)
+            {
+                _cancellationTokenSource.Cancel();
+                _writeToDeviceButton.Text = "Записать в устройство";
+                _writeToDeviceButton.Enabled = false;
+            }
+
         }
 
-        private void WriteToDevice()
+        private async Task WriteToDevice()
         {
+            _writeButtonState = WriteButtonState.STOP;
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
+            int i = 0;
+            //_writeToDeviceButton.Enabled = false;
 
             foreach (Control control in _panelControl.Controls)
             {
-                IModuleControlInerface c= control as IModuleControlInerface;
+                IModuleControlInerface c = control as IModuleControlInerface;
                 if (c != null)
                 {
-                    c.WriteFile();
+                    if (!_cancellationTokenSource.Token.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            await c.WriteFile();
+                            await RefreshModule(i);
+                        }
+                        catch (Exception e)
+                        {
+                            if (_deviceSpecification.ControlType == ControlType.MRTYPE)
+                            {
+
+                                MessageErrorBox messageErrorBox =
+                                    new MessageErrorBox(e.Message,
+                                        "Неудалось записать файл прошивки" + Environment.NewLine + "Продолжить запись");
+                                if (!messageErrorBox.ShowErrorMessageForm())
+                                {
+                                    _writeButtonState = WriteButtonState.WRITE;
+                                    _writeToDeviceButton.Text = "Записать в устройство";
+                                    _writeToDeviceButton.Enabled = true;
+                                    return;
+                                }
+
+                            }
+                            else
+                            {
+                                MessageErrorBox messageErrorBox =
+                                    new MessageErrorBox(e.Message,"Неудалось записать файл прошивки");
+                                messageErrorBox.ShowErrorMessageForm();
+                                _writeButtonState = WriteButtonState.WRITE;
+                                _writeToDeviceButton.Text = "Записать в устройство";
+                                _writeToDeviceButton.Enabled = true;
+                            }
+                            
+                        }
+                        finally
+                        {
+                            await RefreshModule(i);
+                            i++;
+
+                        }
+                    }
+
                 }
             }
+            _writeButtonState = WriteButtonState.WRITE;
+            _writeToDeviceButton.Text = "Записать в устройство";
+            _writeToDeviceButton.Enabled = true;
+            MessageBox.Show("Запись файлов в устройство завершина");
+
         }
 
         private void _deviceNumberTextBox_TextChanged(object sender, EventArgs e)
         {
             DevicesManager.DeviceNumber = Convert.ToByte(_deviceNumberTextBox.Text);
         }
+
     }
 }

@@ -10,13 +10,14 @@ using NModbus4.Unme.Common;
 
 namespace NModBus4.Message.Function12
 {
-   public class Function12Response  : AbstractModbusMessageWithData<RegisterCollection>, IModbusMessage
+   public class Function12ResponseWrite  : AbstractModbusMessageWithData<RegisterCollection>, IModbusMessage
     {
-        public Function12Response()
+        public Function12ResponseWrite()
         {
+
         }
 
-        public Function12Response(byte functionCode, byte slaveAddress, RegisterCollection data)
+        public Function12ResponseWrite(byte functionCode, byte slaveAddress, RegisterCollection data)
             : base(slaveAddress, functionCode)
         {
             if (data == null)
@@ -47,12 +48,14 @@ namespace NModBus4.Message.Function12
 
         protected override void InitializeUnique(byte[] frame)
         {
-            
+            byte[] custombyte=new byte[frame.Length-4];
+            Array.ConstrainedCopy(frame, 2, custombyte, 0, custombyte.Length);
+            MessageImpl.CustomBytesInResponse = custombyte;
+            BytesResult = custombyte;
 
-            ByteCount = frame[2];
-            BytesResult = frame.Skip(3).ToArray();
         }
 
+        
         public byte[] BytesResult { get; set; }
     }
 }

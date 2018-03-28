@@ -43,12 +43,12 @@ namespace MRProg.Connection
         /// <param name="writeArray">Данные для записи</param>
         /// <param name="queryName">Наименование запроса</param>
         /// <returns></returns>
-        public async Task WriteMultipleRegistersAsyncFunction12(byte deviceNum, ushort startAddress, byte moduletype,byte moduleposition,ushort[] writeArray, string queryName)
+        public async Task WriteMultipleRegistersAsyncFunction12(byte deviceNum, ushort startAddress,byte moduleposition,ushort[] writeArray, string queryName)
         {
             try
             {
                 Logger.AddToFile(String.Format("Запрос {0} по адресу {1} ", queryName, startAddress), writeArray.ToArray());
-                await ModbusMaster.ExecuteFunction12Async( startAddress,deviceNum,moduletype,moduleposition, writeArray);
+                await ModbusMaster.ExecuteFunction12WriteAsync( startAddress,deviceNum,moduleposition, writeArray);
                 _queryReport.IsSuccess = true;
             }
             catch (Exception e)
@@ -69,6 +69,37 @@ namespace MRProg.Connection
             {
                 Logger.AddToFile(String.Format("Запрос  на чтение {0} байт  {1} по адресу {2}", numOfPoints, queryName, startAddress));
                 ushort[] res = await ModbusMaster.ReadHoldingRegistersAsync(deviceNum, startAddress, numOfPoints);
+                Logger.AddToFile("ОТВЕТ - ", res.ToArray());
+                _queryReport.IsSuccess = true;
+                return res;
+            }
+            catch (Exception e)
+            {
+                Logger.AddToFile(String.Format("Запрос  на чтение {0} байт  {1} по адресу {2}  выдал ошибку - {3}", numOfPoints, queryName, startAddress, e.Message));
+                _queryReport.IsSuccess = false;
+                throw;
+            }
+            finally
+            {
+                Progress?.Report(_queryReport);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceNum">Номер устройства</param>
+        /// <param name="startAddress">Стартовый адресс</param>
+        /// <param name="numOfPoints">Количество слов</param>
+        /// <param name="moduletype">Тип модуля</param>
+        /// <param name="moduleposition"></param>
+        /// <param name="queryName"></param>
+        /// <returns></returns>
+        public async Task<ushort[]> ReadHoldingRegistersAsyncFunction12(byte deviceNum, ushort startAddress, ushort numOfPoints, byte moduleposition, string queryName)
+        {
+            try
+            {
+                Logger.AddToFile(String.Format("Запрос  на чтение {0} байт  {1} по адресу {2}", numOfPoints, queryName, startAddress));
+                ushort[] res = await ModbusMaster.ExecuteFunction12ReadAsync(startAddress,numOfPoints,deviceNum,moduleposition);
                 Logger.AddToFile("ОТВЕТ - ", res.ToArray());
                 _queryReport.IsSuccess = true;
                 return res;

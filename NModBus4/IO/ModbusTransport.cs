@@ -163,12 +163,12 @@ namespace NModbus4.IO
                 {
                     if (se.SlaveExceptionCode != Modbus.SlaveDeviceBusy)
                     {
-                        throw;
+                        throw new Exception(se.Message);
                     }
 
                     if (SlaveBusyUsesRetryCount && attempt++ > _retries)
                     {
-                        throw;
+                        throw new Exception(se.Message);
                     }
 
                     Debug.WriteLine($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
@@ -185,12 +185,12 @@ namespace NModbus4.IO
 
                         if (attempt++ > _retries)
                         {
-                            throw;
+                            throw new Exception(e.Message);
                         }
                     }
                     else
                     {
-                        throw;
+                        throw new Exception(e.Message);
                     }
                 }
             }
@@ -215,6 +215,7 @@ namespace NModbus4.IO
                 response = ModbusMessageFactory.CreateModbusMessage<T>(frame);
             }
 
+            
             return response;
         }
 
@@ -232,7 +233,6 @@ namespace NModbus4.IO
                 string msg = $"Response slave address does not match request. Expected {response.SlaveAddress}, received {request.SlaveAddress}.";
                 throw new IOException(msg);
             }
-
             // message specific validation
             var req = request as IModbusRequest;
 

@@ -73,10 +73,10 @@ namespace MRProg.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ParityProperty {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ParityProperty {
             get {
-                return ((string)(this["ParityProperty"]));
+                return ((int)(this["ParityProperty"]));
             }
             set {
                 this["ParityProperty"] = value;

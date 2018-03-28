@@ -13,7 +13,7 @@ namespace MRProg.UserControls
         LOADER,
         OK,
         ERROR_WORK_STRING,
-        WRITTING,
+        ERROR_WRITEFILE_TO_MODULE,
         WORK,
         ERROR_READ_MODULE,
         CLEAR,
@@ -75,5 +75,11 @@ namespace MRProg.UserControls
         EEPROM = 0x10,
         BOOT_FLASH = 0x20,
         RALAY_DISCRET = 0x30
+    }
+
+    public enum WriteButtonState
+    {
+        WRITE,
+        STOP
     }
 }

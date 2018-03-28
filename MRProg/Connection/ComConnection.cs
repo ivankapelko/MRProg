@@ -13,6 +13,13 @@ namespace MRProg.Connection
     public class ComConnection
     {
         public ModbusMasterController ModbusMasterController { get; set; }
+
+        public SerialPort Serialport
+        {
+            get { return _serialport; }
+            set { _serialport = value; }
+        }
+
         private ComPortConfiguration _comPortConfiguration;
         private SerialPort _serialport;
         private byte _portNumber;
@@ -22,12 +29,12 @@ namespace MRProg.Connection
             _portNumber = portnumber;
             if (ConnectionManager.Connection != null)
             {
-                ConnectionManager.Connection._serialport.Close();
+                ConnectionManager.Connection.Serialport.Close();
             }
-            _serialport = new SerialPort(string.Format("COM{0}", _portNumber));
+            Serialport = new SerialPort(string.Format("COM{0}", _portNumber));
             UpdateConfiguration();
         }
-
+        
         public void UpdateConfiguration()
         {
             _comPortConfiguration = ConnectionManager.GetComConfig(_portNumber);
@@ -38,12 +45,12 @@ namespace MRProg.Connection
                 ConnectionManager.AddComConfiguration(_portNumber, _comPortConfiguration);
 
             }
-            _serialport.BaudRate = (int)_comPortConfiguration.BaudRateProperty;
-            _serialport.StopBits = _comPortConfiguration.StopBitsProperty;
-            _serialport.Parity = _comPortConfiguration.ParityProperty;
-            _serialport.DataBits = _comPortConfiguration.DataBitsProperty;
-            _serialport.ReadTimeout = _comPortConfiguration.ReadTimeOut;
-            _serialport.WriteTimeout = _comPortConfiguration.WriteTimeOut;
+            Serialport.BaudRate = (int)_comPortConfiguration.BaudRateProperty;
+            Serialport.StopBits = _comPortConfiguration.StopBitsProperty;
+            Serialport.Parity = _comPortConfiguration.ParityProperty;
+            Serialport.DataBits = _comPortConfiguration.DataBitsProperty;
+            Serialport.ReadTimeout = _comPortConfiguration.ReadTimeOut;
+            Serialport.WriteTimeout = _comPortConfiguration.WriteTimeOut;
         }
 
         public bool TryOpenConnection()
@@ -51,12 +58,12 @@ namespace MRProg.Connection
             try
             {
 
-                if (!_serialport.IsOpen)
+                if (!Serialport.IsOpen)
                 {
-                    _serialport.Open();
+                    Serialport.Open();
                     ModbusMasterController = new ModbusMasterController()
                     {
-                        ModbusMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(_serialport))
+                        ModbusMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(Serialport))
                     };
                     ModbusMasterController.Progress = ConnectionManager.Progress; ;
                 };

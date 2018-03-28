@@ -83,7 +83,7 @@ namespace MRProg.Connection
             _stopBitsCb.DataSource = AllStopBits.Values.ToList();
             _speedCb.DataSource = AllBaudRates.Values.ToList();
             _parityCb.DataSource = Paritys.Values.ToList();
-            _dataBitsCb.DataSource = new[] { 5, 6, 7, 8 };
+            _dataBitsCb.DataSource = new[] { 8 };
             var ports = ConnectionManager.GetPorts();
             for (int i = 0; i < ports.Length; i++)
             {
@@ -97,7 +97,9 @@ namespace MRProg.Connection
             if (flag)
             {
                 _portCb.SelectedIndex = index;
+               
             }
+            SetPortConfigurationFromSettings();
         }
 
 
@@ -112,39 +114,28 @@ namespace MRProg.Connection
             _dataBitsCb.SelectedItem = comPortConfiguration.DataBitsProperty;
         }
 
-        private void SetSettings()
+        private async Task SetSettings()
         {
             Settings.Default.Port = Convert.ToInt32(_portCb.SelectedItem.ToString());
-            Settings.Default.BaundRates = Convert.ToInt32(_speedCb.SelectedItem.ToString());
-            Settings.Default.ParityProperty = _parityCb.SelectedItem.ToString();
-            Settings.Default.DataBitsProperty = Convert.ToInt32(_dataBitsCb.SelectedItem.ToString());
-            Settings.Default.StopBitsProperty = Convert.ToInt32(_stopBitsCb.SelectedItem.ToString());
+            Settings.Default.BaundRates = _speedCb.SelectedIndex;
+            Settings.Default.ParityProperty = _parityCb.SelectedIndex;
+            Settings.Default.DataBitsProperty = _dataBitsCb.SelectedIndex;
+            Settings.Default.StopBitsProperty = _stopBitsCb.SelectedIndex;
             Settings.Default.ReadTimeOut = _readTimeOut.Text;
             Settings.Default.WriteTimeOut = _writeTimeOut.Text;
             Settings.Default.Save();
 
         }
 
-        private ComPortConfiguration GetPortConfigurationFromSettings()
+        private void SetPortConfigurationFromSettings()
         {
-            try
-            {
-                _portCb.SelectedItem = Settings.Default.Port;
-            }
-            catch (Exception e)
-            {
-                
-            }
-            ;
-            _speedCb.SelectedItem= Settings.Default.BaundRates;
-           _parityCb.SelectedItem = Settings.Default.ParityProperty;
-          _dataBitsCb.SelectedItem = Settings.Default.DataBitsProperty;
-            _stopBitsCb.SelectedItem= Settings.Default.StopBitsProperty;
+            _speedCb.SelectedIndex =Settings.Default.BaundRates;
+           _parityCb.SelectedIndex = Settings.Default.ParityProperty;
+          _dataBitsCb.SelectedIndex = Settings.Default.DataBitsProperty;
+            _stopBitsCb.SelectedIndex =Settings.Default.StopBitsProperty;
             _readTimeOut.Text = Settings.Default.ReadTimeOut;
             _writeTimeOut.Text= Settings.Default.ReadTimeOut;
             Settings.Default.Save();
-            return GetPortConfiguration();
-
         }
 
         private ComPortConfiguration GetPortConfiguration()
@@ -172,12 +163,12 @@ namespace MRProg.Connection
             }
             SetPortConfiguration(config);
         }
-        private void _applyButton_Click(object sender, EventArgs e)
+        private async  void _applyButton_Click(object sender, EventArgs e)
         {
             ConnectionManager.SelectedPort = _portCb.Text;
             ConnectionManager.AddComConfiguration(Convert.ToByte(_portCb.Text),GetPortConfiguration());
             ConnectionManager.Connection?.UpdateConfiguration();
-            SetSettings();
+            await SetSettings();
             this.Hide();
 
         }

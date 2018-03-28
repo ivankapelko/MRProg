@@ -20,31 +20,15 @@ namespace MRProg.UserControls
     {
         #region Const
 
-        private const string NO_MODULE = "Нет модуля";
         private const string SELECT_FILE = "Выбрать файл";
         private const string READY = "Готово к записи";
-        private const string WRITTING = "Идёт запись";
-        private const string ERROR = "Ошибка";
-        private const string WRITE_OK = "Успешно";
         private const string ERROR_OPEN_FILE = "Ошибка открытия файла";
-        private const string ERROR_READ = " (ОШИБКА ЧТЕНИЯ)";
 
         private const string VERSION_ATTENTION_PATTERN =
             "Версия прошивки модуля {0} соответствует или выше версии выбранного файла";
 
         private const string VERSION_ERROR_PATTERN = "Программная ошибка определение версий модуля {0}";
 
-        private const string ERROR_PERFORM_STEP =
-            "Исключение при увеличение полосы записи. Приложение продолжит работу.";
-
-        private const string CRITICAL_ERROR_INCORRECT_POSITION = "ПРОГРАММНАЯ ОШИБКА. НЕВЕРНАЯ ПОЗИЦИЯ МОДУЛЯ {0}";
-        private const string INCORRECT_MODULE_PATTERN = "Установлен неверный модуль {0}";
-        private const string ERROR_WTITTING_STOP = "Ошибка. Запись модулей остановлена.";
-        private const string START_WRITTING_PATTERN = "Начата прошивка модуля {0}";
-        private const string MODULE_WRITE_OK_PATTERN = "Модуль {0} успешно прошит";
-        private const string MODULE_WRITE_FAIL_PATTERN = "Ошибка. Модуль {0} остался в режиме загрузчика";
-        private const string REWRITING_MODULE_PATTERN = "Начата повторная запись прошивки модуля {0}";
-        private const string CONTINUE_WRITE_MODULE_PATTERN = "Продолжена запись прошивки модуля {0}";
         private const string INCORRECT_FILE = "Некорректный файл";
         #endregion
 
@@ -53,7 +37,7 @@ namespace MRProg.UserControls
         private string _moduleVersion;
         private string _fuze;
         private string _filePath;
-        private ushort[] _data;
+        private byte[] _data;
         private ModuleStates _state;
         private ModuleInformation _moduleInformation;
         private ModuleType _type;
@@ -142,7 +126,15 @@ namespace MRProg.UserControls
                 {
                     this.State = _moduleInformation.State;
                     this.Fuze = _moduleInformation.Fuze;
-                    this.ModuleVersion = _moduleInformation.ModuleVersion.ToString("F1");
+                    if (_moduleInformation.State == ModuleStates.LOADER)
+                    {
+                        this.ModuleVersion = _moduleInformation.LoaderVersion.ToString("F1");
+                    }
+                    else
+                    {
+                        this.ModuleVersion = _moduleInformation.ModuleVersion.ToString("F1");
+
+                    }
                     this.ModuleName = ModuleManager.ModuleTypeFriendlyName(_moduleInformation.ModuleType);
 
                 }
@@ -180,7 +172,7 @@ namespace MRProg.UserControls
         /// <summary>
         /// Прошивка виде слов
         /// </summary>
-        public ushort[] Data
+        public byte[] Data
         {
             get { return _data; }
             set { _data = value; }
@@ -211,6 +203,7 @@ namespace MRProg.UserControls
                 {
                     this.FilePath = this._openFileDialog.FileName;
                     this.SetFilePath();
+                    _workProgramCheckFile.Checked = true;
                 }
                 catch (Exception)
                 {
@@ -228,7 +221,7 @@ namespace MRProg.UserControls
                         //ErrorButtonClick();
                         return;
                     }
-                case ModuleStates.WRITTING:
+                case ModuleStates.ERROR_WRITEFILE_TO_MODULE:
                     {
                         /* var needStop = MessageBox.Show("Вы действительно желаете остановить запись?", "Остановка записи",
                                                    MessageBoxButtons.YesNo);
@@ -265,10 +258,7 @@ namespace MRProg.UserControls
 
         private void SetFilePath()
         {
-            var byteArray = File.ReadAllBytes(this._filePath);
-
-            this._data = Common.TOWORDS(byteArray, false);
-
+            _data = File.ReadAllBytes(this._filePath);
 
             if (this.VerefyFile())
             {
@@ -320,13 +310,16 @@ namespace MRProg.UserControls
                         if (Path.GetFileName(this._filePath) != null)
                         {
                             this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
-                            _workProgramCheckFile.Checked = true;
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
                         }
                         else
                         {
                             this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
                             this._workProgramCheckFile.Text = string.Empty;
                         }
+                        _progressBar.BackColor = SystemColors.Control;
                         this.groupBox1.BackColor = Color.Green;
                         this.groupBox2.BackColor = Color.Green;
                         this.groupBox3.BackColor = Color.Green;
@@ -341,12 +334,16 @@ namespace MRProg.UserControls
                         {
                             this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
                             _workProgramCheckFile.Checked = true;
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
                         }
                         else
                         {
                             this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
                             this._workProgramCheckFile.Text = string.Empty;
                         }
+                        _progressBar.BackColor = SystemColors.Control;
                         this.groupBox1.BackColor = Color.FromArgb(165, 214, 167);
                         this.groupBox2.BackColor = Color.FromArgb(165, 214, 167);
                         this.groupBox3.BackColor = Color.FromArgb(165, 214, 167);
@@ -358,6 +355,18 @@ namespace MRProg.UserControls
                     }
                 case ModuleStates.ANOUTHERPOSITION:
                     {
+                        if (Path.GetFileName(this._filePath) != null)
+                        {
+                            this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
+                        }
+                        else
+                        {
+                            this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
+                            this._workProgramCheckFile.Text = string.Empty;
+                        }
                         this.groupBox1.BackColor = Color.Orange;
                         this.groupBox2.BackColor = Color.Orange;
                         this.groupBox3.BackColor = Color.Orange;
@@ -366,13 +375,25 @@ namespace MRProg.UserControls
                         this._workProgramCheckFile.Checked = false;
                         this._workProgramCheckFile.Text = string.Empty;
                         this._progressBar.Value = 0;
-
+                        _progressBar.BackColor = SystemColors.Control;
                         this._fuzeLable.Text = string.Empty;
                         this._versionLabel.Text = String.Empty;
                         break;
                     }
                 case ModuleStates.ERROR_READ_MODULE:
                     {
+                        if (Path.GetFileName(this._filePath) != null)
+                        {
+                            this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
+                        }
+                        else
+                        {
+                            this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
+                            this._workProgramCheckFile.Text = string.Empty;
+                        }
                         this._moduleNameLable.Text = ModuleManager.ModuleTypeFriendlyName(Information.ModulePositionOnSpecification) + " (Отсутсвует)";
                         //this._mainButton.BackColor = SystemColors.Control;
                         this.BackColor = SystemColors.Control;
@@ -384,6 +405,7 @@ namespace MRProg.UserControls
                         //this.Caption = ModuleData.ModuleTypeFriendlyName(this._moduleType);
                         this._fuzeLable.Text = string.Empty;
                         this._versionLabel.Text = String.Empty;
+                        _progressBar.BackColor = SystemColors.Control;
                         break;
                     }
 
@@ -401,12 +423,9 @@ namespace MRProg.UserControls
                         //this.Enabled = true;
                         break;
                     }
-                case ModuleStates.WRITTING:
+                case ModuleStates.ERROR_WRITEFILE_TO_MODULE:
                     {
-                        //this._mainCheckBox.Text = Path.GetFileName(this._filePath);
-                        //this._mainButton.BackColor = SystemColors.Control;
-                        //this._mainButton.Text = WRITTING;
-                        //this.Enabled = true;
+                        _progressBar.BackColor = Color.Red;
                         break;
                     }
 
@@ -441,6 +460,18 @@ namespace MRProg.UserControls
                     }
                 case ModuleStates.CURRENTVERSIONLESS:
                     {
+                        if (Path.GetFileName(this._filePath) != null)
+                        {
+                            this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
+                        }
+                        else
+                        {
+                            this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
+                            this._workProgramCheckFile.Text = string.Empty;
+                        }
                         this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
                         this._progressBar.Value = 0;
                         this._chooseFile.Text = READY;
@@ -450,11 +481,24 @@ namespace MRProg.UserControls
                         this.groupBox1.BackColor = Color.FromArgb(255, 238, 88);
                         this.groupBox2.BackColor = Color.FromArgb(255, 238, 88);
                         this.groupBox3.BackColor = Color.FromArgb(255, 238, 88);
+                        _progressBar.BackColor = SystemColors.Control;
                         break;
                     }
 
                 case ModuleStates.CURRENTVERSIONHIGHER:
                     {
+                        if (Path.GetFileName(this._filePath) != null)
+                        {
+                            this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
+                        }
+                        else
+                        {
+                            this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
+                            this._workProgramCheckFile.Text = string.Empty;
+                        }
                         this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
                         this._progressBar.Value = 0;
                         this._chooseFile.Text = READY;
@@ -464,10 +508,23 @@ namespace MRProg.UserControls
                         this.groupBox1.BackColor = Color.Pink;
                         this.groupBox2.BackColor = Color.Pink;
                         this.groupBox3.BackColor = Color.Pink;
+                        _progressBar.BackColor = SystemColors.Control;
                         break;
                     }
                 case ModuleStates.CHOICEANOTHERFILE:
                     {
+                        if (Path.GetFileName(this._filePath) != null)
+                        {
+                            this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
+                            _workProgramCheckFile.Checked = false;
+                            _workProgramCheckFile.Enabled = true;
+                        }
+                        else
+                        {
+                            this._workProgramCheckFile.Checked = false;
+                            this._workProgramCheckFile.Enabled = false;
+                            this._workProgramCheckFile.Text = string.Empty;
+                        }
                         this._workProgramCheckFile.Text = Path.GetFileName(this._filePath);
                         _workProgramCheckFile.Enabled = false;
                         _chooseFile.Text = SELECT_FILE;
@@ -475,6 +532,7 @@ namespace MRProg.UserControls
                         this.groupBox1.BackColor = Color.FromArgb(255, 238, 88);
                         this.groupBox2.BackColor = Color.FromArgb(255, 238, 88);
                         this.groupBox3.BackColor = Color.FromArgb(255, 238, 88);
+                        _progressBar.BackColor = SystemColors.Control;
                         _chooseFile.Enabled = true;
                         break;
                     }
@@ -482,32 +540,84 @@ namespace MRProg.UserControls
         }
 
 
-        public void WriteFile()
+        public async Task WriteFile()
         {
             if (this._workProgramCheckFile.Checked)
             {
+                ModuleWritterController moduleWritter = new ModuleWritterController(this.Information, TypeOfMemory.WORK, DevicesManager.DeviceNumber, this._data);
                 try
                 {
-                    ModuleWritterController moduleWritter = new ModuleWritterController(this.Information, TypeOfMemory.WORK, DevicesManager.DeviceNumber, this._data);
-                    moduleWritter.StartSave(_progressBarReport);
+                    await moduleWritter.StartSave(_progressBarReport);
                 }
                 catch (Exception e)
                 {
-                    MessageErrorBox messageError=new MessageErrorBox(e.Message,"Неудалось записать файл прошивки для модуля "+ ModuleManager.ModuleTypeFriendlyName(this.Information.ModuleType));
+                    this.State = ModuleStates.ERROR_WRITEFILE_TO_MODULE;
+                    throw new Exception(e.Message);
                 }
 
             }
 
         }
 
+        public Action<int> NeedRefreshAction { get; set; }
+
         private void OnProgressBarChanged(LoadReport loadReport)
         {
+
             if (_progressBar.Maximum != loadReport.TotalProgressCount)
             {
                 this._progressBar.Maximum = loadReport.TotalProgressCount;
             }
 
             this._progressBar.Value = loadReport.CurrentProgressCount;
+
+        }
+
+        private async void _toBootloaderButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Перевести в режим загрузчика?", "Внимание", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.No)
+            {
+                return;
+            }
+            else
+            {
+                try
+                {
+                    await ModuleWritterController.ModuleToloader(_moduleInformation.ModuleType, DevicesManager.DeviceNumber,
+                        _moduleInformation.ModulePosition);
+
+                   
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("Не удалось перевести в режим загрузчика");
+                    NeedRefreshAction?.Invoke(_moduleInformation.ModulePosition);
+                    return;
+                }
+                MessageBox.Show("Модуль переведен в режим загрузчика");
+                NeedRefreshAction?.Invoke(_moduleInformation.ModulePosition);
+            }
+
+        }
+
+        private async void _toWorkStateButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await ModuleWritterController.ModuleMLKToWork(DevicesManager.DeviceNumber,
+                    _moduleInformation.FlashSize);
+
+
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("Не удалось перевести в рабочий режим");
+                NeedRefreshAction?.Invoke(_moduleInformation.ModulePosition);
+                return;
+            }
+            MessageBox.Show("Модуль переведен в рабочий режим");
+            NeedRefreshAction?.Invoke(_moduleInformation.ModulePosition);
         }
     }
 }

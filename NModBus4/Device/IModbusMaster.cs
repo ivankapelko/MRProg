@@ -85,7 +85,19 @@ namespace NModbus4.Device
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>A task that represents the asynchronous read operation.</returns>
         Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
-        Task<byte[]> ExecuteFunction12Async(ushort startAddress, byte devicenumber,byte moduletype,byte moduleNumber, ushort[] writeArray);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startAddress"></param>
+        /// <param name="devicenumber"></param>
+        /// <param name="moduletype"></param>
+        /// <param name="moduleNumber"></param>
+        /// <param name="writeArray"></param>
+        /// <returns></returns>
+        Task<byte[]> ExecuteFunction12WriteAsync(ushort startAddress, byte devicenumber,byte moduleNumber, ushort[] writeArray);
+    
+
+        Task<ushort[]> ExecuteFunction12ReadAsync(ushort startAddress, ushort numberOfPoints,byte devicenumber, byte moduleNumber);
         /// <summary>
         ///    Writes a single coil value.
         /// </summary>

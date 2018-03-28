@@ -11,6 +11,7 @@ namespace MRProg.UserControls
 
         public int TotalProgressCount { get; set; }
         public int CurrentProgressCount { get; set; }
+        public bool IsCkeckResult=false;
 
 
     }

@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NModbus4;
 using NModbus4.Data;
 using NModbus4.Message;
-using NModBus4.Extensions;
+using NModbus4.Utility;
 
-namespace NModBus4.Message
+namespace NModBus4.Message.Function12
 {
-    public class Function12Request : AbstractModbusMessage, IModbusRequest
+    public class Function12RequestRead: AbstractModbusMessage, IModbusRequest
     {
 
         private int _minimumFrameSize;
 
 
 
-        public Function12Request(byte functionCode, ushort startAddress, byte devicenumber, byte moduletype, byte moduleNumber, ushort[] writeArray) : base(devicenumber, functionCode)
+        public Function12RequestRead(byte functionCode, ushort startAddress, ushort numOfPoints, byte devicenumber, byte moduleNumber) : base(devicenumber, functionCode)
         {
             List<byte> customBytes = new List<byte>();
-            customBytes.Add(devicenumber);
-            customBytes.Add(functionCode);
-            customBytes.Add(moduletype);
-            customBytes.Add(moduleNumber);
-            WriteMultipleRegistersRequest innerRequest= new WriteMultipleRegistersRequest(devicenumber,startAddress,new RegisterCollection(writeArray));
-           customBytes.AddRange(innerRequest.ProtocolDataUnit);
+            var res = 0xF0 | moduleNumber;
+            customBytes.Add(Convert.ToByte(res));
+            ReadHoldingInputRegistersRequest innerRequest = new ReadHoldingInputRegistersRequest(Modbus.ReadInputRegisters,devicenumber,startAddress, numOfPoints);
+            byte[] crcforinnerRequest = ModbusUtility.CalculateCrc(innerRequest.MessageFrame);
+            customBytes.AddRange(innerRequest.MessageFrame);
+            customBytes.AddRange(crcforinnerRequest);
+
 
             MessageImpl.CustomBytesInRequest = customBytes.ToArray();
         }
@@ -39,6 +41,8 @@ namespace NModBus4.Message
             get { return _minimumFrameSize; }
         }
 
+        
+
         protected override void InitializeUnique(byte[] frame)
         {
             throw new NotImplementedException();
@@ -52,6 +56,7 @@ namespace NModBus4.Message
         {
             //
         }
+
 
         #endregion
     }

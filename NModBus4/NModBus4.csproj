@@ -79,8 +79,10 @@
     <Compile Include="Message\AbstractModbusMessage.cs" />
     <Compile Include="Message\AbstractModbusMessageWithData.cs" />
     <Compile Include="Message\DiagnosticsRequestResponse.cs" />
-    <Compile Include="Message\Function12\Function12Request.cs" />
-    <Compile Include="Message\Function12\Function12Response.cs" />
+    <Compile Include="Message\Function12\Function12RequestRead.cs" />
+    <Compile Include="Message\Function12\Function12RequestWrite.cs" />
+    <Compile Include="Message\Function12\Function12ResponseRead.cs" />
+    <Compile Include="Message\Function12\Function12ResponseWrite.cs" />
     <Compile Include="Message\IModbusMessage.cs" />
     <Compile Include="Message\IModbusRequest.cs" />
     <Compile Include="Message\ModbusMessageFactory.cs" />

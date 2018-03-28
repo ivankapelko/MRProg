@@ -8,6 +8,8 @@ namespace MRProg.Module
 {
     interface IModuleControlInerface
     {
-        void WriteFile();
+        Task WriteFile();
+
+        Action<int> NeedRefreshAction { get; set; }
     }
 }

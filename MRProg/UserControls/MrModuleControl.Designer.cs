@@ -28,17 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this._versionLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this._fuzeLable = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this._toBootloaderButton = new MetroFramework.Controls.MetroButton();
+            this._toWorkStateButton = new MetroFramework.Controls.MetroButton();
+            this._progressBar = new System.Windows.Forms.ProgressBar();
             this._workProgramCheckFile = new System.Windows.Forms.CheckBox();
             this._chooseFile = new MetroFramework.Controls.MetroButton();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
-            this._progressBar = new MetroFramework.Controls.MetroProgressBar();
             this._openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this._moduleNameLable = new System.Windows.Forms.Label();
-            this._versionLabel = new System.Windows.Forms.Label();
-            this._fuzeLable = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -56,6 +60,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Версия";
             // 
+            // _versionLabel
+            // 
+            this._versionLabel.AutoSize = true;
+            this._versionLabel.Location = new System.Drawing.Point(16, 22);
+            this._versionLabel.Name = "_versionLabel";
+            this._versionLabel.Size = new System.Drawing.Size(22, 13);
+            this._versionLabel.TabIndex = 1;
+            this._versionLabel.Text = "ver";
+            // 
             // groupBox2
             // 
             this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -68,22 +81,67 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Фьюзы";
             // 
+            // _fuzeLable
+            // 
+            this._fuzeLable.AutoSize = true;
+            this._fuzeLable.Location = new System.Drawing.Point(24, 22);
+            this._fuzeLable.Name = "_fuzeLable";
+            this._fuzeLable.Size = new System.Drawing.Size(27, 13);
+            this._fuzeLable.TabIndex = 2;
+            this._fuzeLable.Text = "fuze";
+            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox3.Controls.Add(this._toBootloaderButton);
+            this.groupBox3.Controls.Add(this._toWorkStateButton);
+            this.groupBox3.Controls.Add(this._progressBar);
             this.groupBox3.Controls.Add(this._workProgramCheckFile);
             this.groupBox3.Controls.Add(this._chooseFile);
             this.groupBox3.Controls.Add(this.metroButton1);
-            this.groupBox3.Controls.Add(this._progressBar);
             this.groupBox3.Location = new System.Drawing.Point(214, 0);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(631, 81);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Рабочая программа";
+            // 
+            // _toBootloaderButton
+            // 
+            this._toBootloaderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._toBootloaderButton.Location = new System.Drawing.Point(574, 9);
+            this._toBootloaderButton.Name = "_toBootloaderButton";
+            this._toBootloaderButton.Size = new System.Drawing.Size(24, 21);
+            this._toBootloaderButton.TabIndex = 6;
+            this._toBootloaderButton.Text = "З";
+            this.toolTip1.SetToolTip(this._toBootloaderButton, "Перевод модуля в режим загрузчика");
+            this._toBootloaderButton.UseSelectable = true;
+            this._toBootloaderButton.Click += new System.EventHandler(this._toBootloaderButton_Click);
+            // 
+            // _toWorkStateButton
+            // 
+            this._toWorkStateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._toWorkStateButton.Location = new System.Drawing.Point(601, 9);
+            this._toWorkStateButton.Name = "_toWorkStateButton";
+            this._toWorkStateButton.Size = new System.Drawing.Size(24, 21);
+            this._toWorkStateButton.TabIndex = 5;
+            this._toWorkStateButton.Text = "Р";
+            this.toolTip1.SetToolTip(this._toWorkStateButton, "Перевод модуля в рабочий режим");
+            this._toWorkStateButton.UseSelectable = true;
+            this._toWorkStateButton.Click += new System.EventHandler(this._toWorkStateButton_Click);
+            // 
+            // _progressBar
+            // 
+            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._progressBar.BackColor = System.Drawing.SystemColors.Control;
+            this._progressBar.Location = new System.Drawing.Point(8, 47);
+            this._progressBar.Name = "_progressBar";
+            this._progressBar.Size = new System.Drawing.Size(588, 23);
+            this._progressBar.TabIndex = 4;
             // 
             // _workProgramCheckFile
             // 
@@ -114,15 +172,6 @@
             this.metroButton1.Text = "С";
             this.metroButton1.UseSelectable = true;
             // 
-            // _progressBar
-            // 
-            this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._progressBar.Location = new System.Drawing.Point(7, 48);
-            this._progressBar.Name = "_progressBar";
-            this._progressBar.Size = new System.Drawing.Size(588, 23);
-            this._progressBar.TabIndex = 0;
-            // 
             // _openFileDialog
             // 
             this._openFileDialog.Filter = "Файл прошивки (*.bin)|*.bin";
@@ -135,24 +184,6 @@
             this._moduleNameLable.Size = new System.Drawing.Size(117, 13);
             this._moduleNameLable.TabIndex = 4;
             this._moduleNameLable.Text = "Модуль не определен";
-            // 
-            // _versionLabel
-            // 
-            this._versionLabel.AutoSize = true;
-            this._versionLabel.Location = new System.Drawing.Point(16, 22);
-            this._versionLabel.Name = "_versionLabel";
-            this._versionLabel.Size = new System.Drawing.Size(22, 13);
-            this._versionLabel.TabIndex = 1;
-            this._versionLabel.Text = "ver";
-            // 
-            // _fuzeLable
-            // 
-            this._fuzeLable.AutoSize = true;
-            this._fuzeLable.Location = new System.Drawing.Point(24, 22);
-            this._fuzeLable.Name = "_fuzeLable";
-            this._fuzeLable.Size = new System.Drawing.Size(27, 13);
-            this._fuzeLable.TabIndex = 2;
-            this._fuzeLable.Text = "fuze";
             // 
             // MrModuleControl
             // 
@@ -183,11 +214,14 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private MetroFramework.Controls.MetroButton _chooseFile;
         private MetroFramework.Controls.MetroButton metroButton1;
-        private MetroFramework.Controls.MetroProgressBar _progressBar;
         private System.Windows.Forms.OpenFileDialog _openFileDialog;
         private System.Windows.Forms.CheckBox _workProgramCheckFile;
         private System.Windows.Forms.Label _moduleNameLable;
         private System.Windows.Forms.Label _versionLabel;
         private System.Windows.Forms.Label _fuzeLable;
+        private System.Windows.Forms.ProgressBar _progressBar;
+        private MetroFramework.Controls.MetroButton _toBootloaderButton;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private MetroFramework.Controls.MetroButton _toWorkStateButton;
     }
 }
