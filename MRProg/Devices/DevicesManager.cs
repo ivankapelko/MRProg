@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MRProg.Connection;
 
 namespace MRProg.Devices
@@ -213,5 +213,7 @@ namespace MRProg.Devices
             get { return _deviceNumber; }
             set { _deviceNumber = value; }
         }
+
+       
     }
 }

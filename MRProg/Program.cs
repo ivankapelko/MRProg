@@ -9,6 +9,7 @@ namespace MRProg
 {
     static class Program
     {
+        public static Form MainFormReferense { private set; get; }
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
@@ -17,7 +18,8 @@ namespace MRProg
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            MainFormReferense = new MainForm();
+            Application.Run(MainFormReferense);
         }
     }
 }

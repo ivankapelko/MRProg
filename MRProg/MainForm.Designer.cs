@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this._panelControl = new MetroFramework.Controls.MetroPanel();
-            this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this._openFolderButton = new MetroFramework.Controls.MetroButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
@@ -41,6 +41,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this._writeToDeviceButton = new MetroFramework.Controls.MetroButton();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel11 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -63,6 +65,7 @@
             this._deviceNumberTextBox = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this._deviceNameLabel = new MetroFramework.Controls.MetroLabel();
+            this._readInformationButton = new MetroFramework.Controls.MetroButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -86,7 +89,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.metroButton2);
+            this.splitContainer1.Panel2.Controls.Add(this._openFolderButton);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox6);
             this.splitContainer1.Panel2.Controls.Add(this._writeToDeviceButton);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox5);
@@ -114,16 +117,17 @@
             this._panelControl.VerticalScrollbarHighlightOnWheel = false;
             this._panelControl.VerticalScrollbarSize = 10;
             // 
-            // metroButton2
+            // _openFolderButton
             // 
-            this.metroButton2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this._openFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroButton2.Location = new System.Drawing.Point(6, 363);
-            this.metroButton2.Name = "metroButton2";
-            this.metroButton2.Size = new System.Drawing.Size(328, 23);
-            this.metroButton2.TabIndex = 5;
-            this.metroButton2.Text = "Выбрать каталог с рабочими программами";
-            this.metroButton2.UseSelectable = true;
+            this._openFolderButton.Location = new System.Drawing.Point(6, 363);
+            this._openFolderButton.Name = "_openFolderButton";
+            this._openFolderButton.Size = new System.Drawing.Size(328, 23);
+            this._openFolderButton.TabIndex = 5;
+            this._openFolderButton.Text = "Выбрать каталог с рабочими программами";
+            this._openFolderButton.UseSelectable = true;
+            this._openFolderButton.Click += new System.EventHandler(this.metroButton2_Click);
             // 
             // groupBox6
             // 
@@ -135,9 +139,9 @@
             this.groupBox6.Controls.Add(this.panel8);
             this.groupBox6.Controls.Add(this.panel2);
             this.groupBox6.Controls.Add(this.label3);
-            this.groupBox6.Location = new System.Drawing.Point(6, 191);
+            this.groupBox6.Location = new System.Drawing.Point(6, 213);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(328, 105);
+            this.groupBox6.Size = new System.Drawing.Size(328, 89);
             this.groupBox6.TabIndex = 72;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Информация о выбранной рабочей программе";
@@ -146,7 +150,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(30, 69);
+            this.label8.Location = new System.Drawing.Point(29, 64);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(288, 13);
             this.label8.TabIndex = 74;
@@ -156,7 +160,7 @@
             // 
             this.panel9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
             this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel9.Location = new System.Drawing.Point(4, 67);
+            this.panel9.Location = new System.Drawing.Point(4, 61);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(20, 20);
             this.panel9.TabIndex = 73;
@@ -164,7 +168,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 23);
+            this.label5.Location = new System.Drawing.Point(29, 22);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(270, 13);
             this.label5.TabIndex = 58;
@@ -174,7 +178,7 @@
             // 
             this.panel8.BackColor = System.Drawing.Color.Pink;
             this.panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel8.Location = new System.Drawing.Point(4, 42);
+            this.panel8.Location = new System.Drawing.Point(4, 40);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(20, 20);
             this.panel8.TabIndex = 71;
@@ -191,7 +195,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 46);
+            this.label3.Location = new System.Drawing.Point(29, 43);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(275, 13);
             this.label3.TabIndex = 72;
@@ -213,6 +217,8 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Controls.Add(this.label2);
+            this.groupBox5.Controls.Add(this.panel11);
             this.groupBox5.Controls.Add(this.label11);
             this.groupBox5.Controls.Add(this.panel10);
             this.groupBox5.Controls.Add(this.label1);
@@ -229,25 +235,44 @@
             this.groupBox5.Controls.Add(this.panel1);
             this.groupBox5.Location = new System.Drawing.Point(6, 12);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(328, 173);
+            this.groupBox5.Size = new System.Drawing.Size(328, 195);
             this.groupBox5.TabIndex = 57;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Информация о состоянии модуля";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(29, 85);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(286, 13);
+            this.label2.TabIndex = 74;
+            this.label2.Text = "Работает программа устройства (без привязки к типу)";
+            // 
+            // panel11
+            // 
+            this.panel11.BackColor = System.Drawing.Color.RoyalBlue;
+            this.panel11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel11.Location = new System.Drawing.Point(6, 83);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(20, 20);
+            this.panel11.TabIndex = 73;
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(29, 155);
+            this.label11.Location = new System.Drawing.Point(30, 170);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(123, 13);
+            this.label11.Size = new System.Drawing.Size(107, 13);
             this.label11.TabIndex = 72;
-            this.label11.Text = "Ошибочное состояние ";
+            this.label11.Text = "Ошибка (загрузчик)";
             // 
             // panel10
             // 
             this.panel10.BackColor = System.Drawing.Color.Magenta;
             this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel10.Location = new System.Drawing.Point(3, 152);
+            this.panel10.Location = new System.Drawing.Point(6, 167);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(20, 20);
             this.panel10.TabIndex = 71;
@@ -266,7 +291,7 @@
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(165)))), ((int)(((byte)(245)))));
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Location = new System.Drawing.Point(3, 41);
+            this.panel5.Location = new System.Drawing.Point(6, 41);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(20, 20);
             this.panel5.TabIndex = 69;
@@ -284,7 +309,7 @@
             // 
             this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(214)))), ((int)(((byte)(167)))));
             this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel7.Location = new System.Drawing.Point(3, 62);
+            this.panel7.Location = new System.Drawing.Point(6, 62);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(20, 20);
             this.panel7.TabIndex = 67;
@@ -293,7 +318,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.Color.Black;
-            this.label9.Location = new System.Drawing.Point(29, 86);
+            this.label9.Location = new System.Drawing.Point(29, 108);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(174, 13);
             this.label9.TabIndex = 66;
@@ -303,7 +328,7 @@
             // 
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel6.Location = new System.Drawing.Point(3, 84);
+            this.panel6.Location = new System.Drawing.Point(6, 104);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(20, 20);
             this.panel6.TabIndex = 65;
@@ -311,7 +336,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(29, 20);
+            this.label7.Location = new System.Drawing.Point(29, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(198, 13);
             this.label7.TabIndex = 62;
@@ -321,7 +346,7 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(216)))), ((int)(((byte)(220)))));
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Location = new System.Drawing.Point(3, 18);
+            this.panel4.Location = new System.Drawing.Point(6, 20);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(20, 20);
             this.panel4.TabIndex = 61;
@@ -329,17 +354,17 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(29, 131);
+            this.label6.Location = new System.Drawing.Point(29, 150);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(174, 13);
+            this.label6.Size = new System.Drawing.Size(126, 13);
             this.label6.TabIndex = 60;
-            this.label6.Text = "Ошибка (модуль без загрузчика)";
+            this.label6.Text = "Модуль без загрузчика";
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Red;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Location = new System.Drawing.Point(3, 128);
+            this.panel3.Location = new System.Drawing.Point(6, 146);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(20, 20);
             this.panel3.TabIndex = 59;
@@ -347,7 +372,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(29, 110);
+            this.label4.Location = new System.Drawing.Point(29, 129);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(214, 13);
             this.label4.TabIndex = 57;
@@ -357,7 +382,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(167)))), ((int)(((byte)(38)))));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(3, 106);
+            this.panel1.Location = new System.Drawing.Point(6, 125);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(20, 20);
             this.panel1.TabIndex = 55;
@@ -463,11 +488,23 @@
             this._deviceNameLabel.Size = new System.Drawing.Size(0, 0);
             this._deviceNameLabel.TabIndex = 6;
             // 
+            // _readInformationButton
+            // 
+            this._readInformationButton.Enabled = false;
+            this._readInformationButton.Location = new System.Drawing.Point(226, 19);
+            this._readInformationButton.Name = "_readInformationButton";
+            this._readInformationButton.Size = new System.Drawing.Size(97, 34);
+            this._readInformationButton.TabIndex = 7;
+            this._readInformationButton.Text = "Перечитать ";
+            this._readInformationButton.UseSelectable = true;
+            this._readInformationButton.Click += new System.EventHandler(this._readInformationButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1147, 586);
+            this.Controls.Add(this._readInformationButton);
             this.Controls.Add(this._deviceNameLabel);
             this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this._deviceNumberTextBox);
@@ -526,8 +563,11 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
-        private MetroFramework.Controls.MetroButton metroButton2;
+        private MetroFramework.Controls.MetroButton _openFolderButton;
         private MetroFramework.Controls.MetroButton _writeToDeviceButton;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panel11;
+        private MetroFramework.Controls.MetroButton _readInformationButton;
     }
 }
 

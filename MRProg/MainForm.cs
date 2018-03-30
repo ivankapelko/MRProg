@@ -23,6 +23,7 @@ namespace MRProg
         private const string GOOD_REQUESTS_PATTERN = "Успешных запросов - {0}";
         private const string BAD_REQUESTS_PATTERN = "Неудачных запросов - {0}";
         private const string ALL_REQUESTS_PATTERN = "Всех запросов - {0}";
+        private const string CONFIG_FILE_NAME = "BootConfig.ini";
 
 
 
@@ -87,6 +88,7 @@ namespace MRProg
                 }
 
             }
+            _readInformationButton.Enabled = true;
         }
 
         private async Task SetControl()
@@ -267,7 +269,7 @@ namespace MRProg
             _writeButtonState = WriteButtonState.WRITE;
             _writeToDeviceButton.Text = "Записать в устройство";
             _writeToDeviceButton.Enabled = true;
-            MessageBox.Show("Запись файлов в устройство завершина");
+            MessageBox.Show("Запись файлов в устройство завершена");
 
         }
 
@@ -276,5 +278,43 @@ namespace MRProg
             DevicesManager.DeviceNumber = Convert.ToByte(_deviceNumberTextBox.Text);
         }
 
+        private void metroButton2_Click(object sender, EventArgs e)
+        {
+            var path = LoadFolder();
+            if (!string.IsNullOrEmpty(path))
+            {
+                this._openFolderButton.Text = path;
+            }
+        }
+
+        public string LoadFolder()
+        {
+            var folderBrowser = new FolderBrowserDialog();
+            if (File.Exists(CONFIG_FILE_NAME))
+            {
+                folderBrowser.SelectedPath = File.ReadAllText(CONFIG_FILE_NAME);
+            }
+
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                string result = folderBrowser.SelectedPath;
+                File.WriteAllText(CONFIG_FILE_NAME, result);
+
+                var allFiles = Directory.GetFiles(result);
+
+                foreach (var control in _panelControl.Controls)
+                {
+                    (control as IModuleControlInerface).SetFileFolder(result, allFiles);
+                }
+
+                return result;
+            }
+            return null;
+        }
+
+        private async void _readInformationButton_Click(object sender, EventArgs e)
+        {
+            await SetControl();
+        }
     }
 }

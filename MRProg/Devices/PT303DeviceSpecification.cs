@@ -22,7 +22,7 @@ namespace MRProg.Devices
 
         public string DeviceName
         {
-            get { return "PT"; }
+            get { return "PT303"; }
         }
 
 

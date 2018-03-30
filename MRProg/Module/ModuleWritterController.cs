@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MRProg.Connection;
 using MRProg.Connection.Enum;
+using MRProg.Devices;
 using MRProg.UserControls;
 using NModbus4.Utility;
 
@@ -37,13 +38,22 @@ namespace MRProg.Module
         private bool _isMR = false;
         private ushort _crc;
 
+        public byte[] Data
+        {
+            get { return _data; }
+            set { _data = value; }
+        }
 
+        public ModuleWritterController Clone()
+        {
+            return new ModuleWritterController(_moduleInformation, _typeOfMemory, _deviceNumber);
+        }
         public ModuleWritterController(ModuleInformation moduleInformation, TypeOfMemory memoryType, byte devicenumber, byte[] data, ushort startpage = 0, ushort count = 0)
         {
             _moduleInformation = moduleInformation;
             _typeOfMemory = memoryType;
             _deviceNumber = devicenumber;
-            _data = data;
+            Data = data;
             if (moduleInformation.ControlType == ControlType.MRTYPE)
             {
                 _isMR = true;
@@ -93,6 +103,11 @@ namespace MRProg.Module
                         if (_moduleInformation.Processor == ProcessorType.AT_MEGA_128)
                         {
                             _pageCount = 480;
+                            break;
+                        }
+                        if (_moduleInformation.Processor == ProcessorType.AT_MEGA_2561)
+                        {
+                            _pageCount = 992;
                             break;
                         }
                         else
@@ -170,6 +185,10 @@ namespace MRProg.Module
         }
         public async Task ModuleToloader()
         {
+            if (_moduleInformation.State == ModuleStates.LOADER)
+            {
+                return;
+            }
             string name = "Перевод модуля в режим загрузчика";
             var res = Common.TOWORD(0, (byte)((Convert.ToByte(_moduleInformation.ModuleType) << 4) | _moduleInformation.ModulePosition));
             var writePageArray = new ushort[] { res, };
@@ -185,30 +204,113 @@ namespace MRProg.Module
             }
         }
 
-        public static async Task ModuleToloader(ModuleType type,byte devicenumber,byte moduleposition)
+        public static async Task ModuleToloader(ModuleInformation information)
         {
+            if (information.State == ModuleStates.LOADER)
+            {
+                return;
+            }
             string name = "Перевод модуля в режим загрузчика";
-            var res = Common.TOWORD(0, (byte)((Convert.ToByte(type) << 4) | moduleposition));
+            var res = Common.TOWORD(0, (byte)((Convert.ToByte(information.ModuleType) << 4) | information.ModulePosition));
             var writePageArray = new ushort[] { res, };
 
             try
             {
-                await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(devicenumber, 0x3A0,
+                await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(DevicesManager.DeviceNumber, 0x3A0,
                     writePageArray, name);
             }
             catch (Exception e)
             {
-               throw new Exception(e.Message);
+                throw new Exception(e.Message);
             }
         }
 
-        public static async Task ModuleMLKToloader()
+        public static async Task ClearModule(ModuleInformation information)
         {
+            ushort controlWord = 0;
+            controlWord = Common.SetBits(controlWord, (ushort)information.ModuleType, 4, 5, 6, 7);
+            controlWord = Common.SetBits(controlWord, information.ModulePosition, 0, 1, 2, 3);
+            try
+            {
+
+
+                if (information.ControlType == ControlType.MRTYPE)
+                {
+                    await ModuleToloader(information);
+
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsyncFunction12(DevicesManager.DeviceNumber, 0, information.ModulePosition,
+                        new ushort[8] { 0, 0, 0, 0, 0, 0, 0, 0 }, "Очитска модуля 2-ый этап");
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsyncFunction12(DevicesManager.DeviceNumber, (ushort)(information.FlashSize + 1), information.ModulePosition,
+                        new ushort[1] { 0x8001 }, "Очитска модуля 2-ый этап");
+
+                }
+                else
+                {
+                    ModuleMLKToloader(information);
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(DevicesManager.DeviceNumber, 0,
+                        new ushort[8] { 0, 0, 0, 0, 0, 0, 0, 0 }, "Очитска модуля 2-ый этап");
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(DevicesManager.DeviceNumber, (ushort)(information.FlashSize + 1),
+                        new ushort[1] { 0x8001 }, "Очитска модуля 2-ый этап");
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
+
+        public static async Task WriteDevInfo(ModuleInformation information, string devinfo)
+        {
+            ushort controlWord = 0;
+            controlWord = Common.SetBits(controlWord, (ushort)information.ModuleType, 4, 5, 6, 7);
+            controlWord = Common.SetBits(controlWord, information.ModulePosition, 0, 1, 2, 3);
+            var inBytes = Common.TOWORDS(devinfo.Select(o => (byte)o).ToArray(), false);
+            try
+            {
+
+
+                if (information.ControlType == ControlType.MRTYPE)
+                {
+
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsyncFunction12(DevicesManager.DeviceNumber, 0, information.ModulePosition,
+                        inBytes, "Очитска модуля 2-ый этап");
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsyncFunction12(DevicesManager.DeviceNumber, (ushort)(information.FlashSize+1), information.ModulePosition,
+                        new ushort[1] { 0x8001 }, "Очитска модуля 2-ый этап");
+
+                }
+                else
+                {
+
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(DevicesManager.DeviceNumber, 0,
+                        inBytes, "Очитска модуля 2-ый этап");
+                    await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(DevicesManager.DeviceNumber, (ushort)(information.FlashSize + 1),
+                        new ushort[1] { 0x8001 }, "Очитска модуля 2-ый этап");
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
+        public static void ModuleMLKToloader(ModuleInformation information)
+        {
+
+            if (information.State == ModuleStates.LOADER)
+            {
+                return;
+            }
             string name = "Перевод модуля в режим загрузчика";
 
             try
             {
                 byte[] buffer = new byte[] { 0x01, 0xff, 0x47, 0x4f, 0x20, 0x54, 0x4f, 0x20, 0x42, 0x4f, 0x4f, 0x54, 0x4c, 0x4f, 0x41, 0x44, 0x45, 0x52, 0x42, 0xef };
+
                 ConnectionManager.Connection.Serialport.Write(buffer, 0, buffer.Length);
 
             }
@@ -218,13 +320,17 @@ namespace MRProg.Module
             }
         }
 
-        public static async Task ModuleMLKToWork(byte devicenumber, int flashsize)
+        public static async Task ModuleMLKToWork(ModuleInformation information)
         {
+            if (information.State == ModuleStates.WORK)
+            {
+                return;
+            }
             string name = "Перевод модуля в рабочий режим";
             try
             {
-                await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(devicenumber,
-                    (ushort)(flashsize + 1),
+                await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsync(DevicesManager.DeviceNumber,
+                    (ushort)(information.FlashSize + 1),
                     new ushort[] { 0x8002 }, name);
             }
             catch (Exception e)
@@ -299,7 +405,7 @@ namespace MRProg.Module
         /// <param name="progress"></param>
         /// <param name="isCheck">Является ли чтение проверочным</param>
         /// <returns></returns>
-        public async Task<byte[]> ReadPage(IProgress<LoadReport> progress,bool isCheck=false)
+        public async Task<byte[]> ReadPage(IProgress<LoadReport> progress, bool isCheck = false)
         {
             int arraySize = this._pageCount * this._moduleInformation.FlashSize * 2;
             var tempArray = new byte[arraySize];
@@ -329,7 +435,7 @@ namespace MRProg.Module
                         {
                             progress.Report(new LoadReport()
                             {
-                                CurrentProgressCount = (i - _startPage + 1)+_pageCount,  
+                                CurrentProgressCount = (i - _startPage + 1) + _pageCount,
                                 IsCkeckResult = true
                             });
                         }
@@ -428,15 +534,15 @@ namespace MRProg.Module
         /// <returns></returns>
         public async Task StartSave(IProgress<LoadReport> progress)
         {
-            if (_data.Length > this._pageCount * this._moduleInformation.FlashSize * 2)
+            if (Data.Length > this._pageCount * this._moduleInformation.FlashSize * 2)
             {
                 throw new Exception("Неверный размер файла");
             }
             else
             {
-                if ((_data.Length % (this._moduleInformation.FlashSize * 2)) == 0)
+                if ((Data.Length % (this._moduleInformation.FlashSize * 2)) == 0)
                 {
-                    _pageCount = (ushort)(_data.Length / (this._moduleInformation.FlashSize * 2));
+                    _pageCount = (ushort)(Data.Length / (this._moduleInformation.FlashSize * 2));
                 }
                 else
                 {
@@ -446,6 +552,7 @@ namespace MRProg.Module
             _currentPage = 0;
             try
             {
+
                 await ModuleToloader();
                 await Task.Delay(2000);
                 await this.FillPage(progress);
@@ -463,15 +570,15 @@ namespace MRProg.Module
 
         public async Task StartSaveForAnotherMemmoryType(IProgress<LoadReport> progress)
         {
-            if (_data.Length > this._pageCount * this._moduleInformation.FlashSize * 2)
+            if (Data.Length > this._pageCount * this._moduleInformation.FlashSize * 2)
             {
                 throw new Exception("Неверный размер файла");
             }
             else
             {
-                if ((_data.Length % (this._moduleInformation.FlashSize * 2)) == 0)
+                if ((Data.Length % (this._moduleInformation.FlashSize * 2)) == 0)
                 {
-                    _pageCount = (ushort)(_data.Length / (this._moduleInformation.FlashSize * 2));
+                    _pageCount = (ushort)(Data.Length / (this._moduleInformation.FlashSize * 2));
                 }
                 else
                 {
@@ -481,9 +588,9 @@ namespace MRProg.Module
             _currentPage = 0;
             try
             {
-                await ModuleMLKToloader();
+                ModuleMLKToloader(_moduleInformation);
                 await Task.Delay(2000);
-                await this.FillPage(progress,true);
+                await this.FillPage(progress, true);
                 await CheckResultWrite(progress);
             }
             catch (Exception e)
@@ -492,30 +599,30 @@ namespace MRProg.Module
             }
         }
 
-        
+
         private async Task CheckResultWrite(IProgress<LoadReport> progress)
         {
             List<int> listErrorPage = new List<int>();
             try
             {
-                byte[] result = await this.ReadPage(progress,true);
+                byte[] result = await this.ReadPage(progress, true);
                 Common.SwapArrayItems(ref result);
-                if (result.Length != _data.Length)
+                if (result.Length != Data.Length)
                 {
                     MessageBox.Show("Длинна записанного и прочитанного файла не совпадает");
                     return;
                 }
-                for (int i = 0; i < _data.Length; i++)
+                for (int i = 0; i < Data.Length; i++)
                 {
-                    if (_data[i] != result[i])
+                    if (Data[i] != result[i])
                     {
-                        if (_data[i] % (this._moduleInformation.FlashSize * 2) > 0)
+                        if (Data[i] % (this._moduleInformation.FlashSize * 2) > 0)
                         {
-                            listErrorPage.Add((_data[i] / (this._moduleInformation.FlashSize * 2)) + 1);
+                            listErrorPage.Add((Data[i] / (this._moduleInformation.FlashSize * 2)) + 1);
                         }
                         else
                         {
-                            listErrorPage.Add(_data[i] / (this._moduleInformation.FlashSize * 2));
+                            listErrorPage.Add(Data[i] / (this._moduleInformation.FlashSize * 2));
                         }
                     }
                 }
@@ -542,7 +649,7 @@ namespace MRProg.Module
                 throw new Exception(e.Message);
             }
 
-           
+
         }
         /// <summary>
         /// Запись страниц
@@ -550,7 +657,7 @@ namespace MRProg.Module
         /// <param name="progress"></param>
         /// <param name="isCkeck">Нужна ли проверка</param>
         /// <returns></returns>
-        private async Task FillPage(IProgress<LoadReport> progress,bool isCkeck=false)
+        private async Task FillPage(IProgress<LoadReport> progress, bool isCkeck = false)
         {
             ushort address = 0;
             ushort startPage = _startPage;
@@ -567,7 +674,7 @@ namespace MRProg.Module
 
                         int arraySize = this._moduleInformation.FlashSize * 2;
                         var tempArray = new byte[arraySize];
-                        Array.Copy(this._data, (i - startPage) * arraySize, tempArray, 0, arraySize);
+                        Array.Copy(this.Data, (i - startPage) * arraySize, tempArray, 0, arraySize);
 
                         var tempArrayUshortToWrite = Common.TOWORDS(tempArray, false);
                         var writePageArray = new ushort[] { i, (ushort)(Func.WRITE | (Func)this._typeOfMemory) };
@@ -584,9 +691,9 @@ namespace MRProg.Module
                         }
                         else
                         {
-                            progress.Report(new LoadReport() { CurrentProgressCount = i - startPage + 1, TotalProgressCount = _pageCount*2 });
+                            progress.Report(new LoadReport() { CurrentProgressCount = i - startPage + 1, TotalProgressCount = _pageCount * 2 });
                         }
-                        
+
                         //if (!checkResult)
                         //{
                         //    isLoadAgain = true;
@@ -616,7 +723,7 @@ namespace MRProg.Module
             }
             if (!isCkeck)
             {
-                progress.Report(new LoadReport() {CurrentProgressCount = 0, TotalProgressCount = 0});
+                progress.Report(new LoadReport() { CurrentProgressCount = 0, TotalProgressCount = 0 });
             }
 
         }
@@ -624,7 +731,7 @@ namespace MRProg.Module
 
         private async Task WriteCRC()
         {
-            _crc = Common.SwapByte(Crc16.CalcCrcFast(this._data, _data.Length));
+            _crc = Common.SwapByte(Crc16.CalcCrcFast(this.Data, Data.Length));
             ushort[] data = new ushort[] { (ushort)_pageCount, 0x8000, _crc };
             try
             {
@@ -690,6 +797,24 @@ namespace MRProg.Module
 
         }
 
+        public static async Task ModuleToWork(ModuleInformation information)
+        {
+            if (information.State == ModuleStates.WORK)
+            {
+                return;
+            }
+            ushort[] data = new ushort[] { 0x35AA };
+            try
+            {
+                await ConnectionManager.Connection.ModbusMasterController?.WriteMultipleRegistersAsyncFunction12(DevicesManager.DeviceNumber, (ushort)(information.FlashSize + 1), information.ModulePosition,
+                    data, "запись сигнатуры");
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Ошибка записи сигнатуры");
+            }
+        }
 
     }
 }

@@ -9,7 +9,7 @@ namespace MRProg.Module
     interface IModuleControlInerface
     {
         Task WriteFile();
-
+        void SetFileFolder(string directoryPath, IEnumerable<string> filesName);
         Action<int> NeedRefreshAction { get; set; }
     }
 }

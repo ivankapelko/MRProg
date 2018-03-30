@@ -19,10 +19,20 @@ namespace MRProg.UserControls
         CLEAR,
         WITHOUTTYPE,
         ANOUTHERPOSITION,
+        //CURRENTVERSIONLESS,
+        //CURRENTVERSIONHIGHER,
+        //CHOICEANOTHERFILE
+            
+    };
+
+    public enum ModuleFileStates
+    {
+        NOFILE,
+        WORK_FILE,
         CURRENTVERSIONLESS,
         CURRENTVERSIONHIGHER,
         CHOICEANOTHERFILE
-            
+
     };
     /// <summary>
     /// 

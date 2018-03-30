@@ -45,7 +45,7 @@ namespace MRProg.Module
             set
             {
                 _modulepositionOnSpecification = value;
-                if (State != ModuleStates.ERROR_READ_MODULE && State != ModuleStates.LOADER)
+                if (State == ModuleStates.WORK)
                 {
                     if (_modulepositionOnSpecification != this.ModuleType)
                     {
@@ -210,27 +210,27 @@ namespace MRProg.Module
                         }
                     case ModuleType.MLK:
                         {
-                            moduleTypeString = string.Format("MLK    {0}", this.MlkType);
+                            moduleTypeString = "MLK   ";
                             break;
                         }
                     case ModuleType.KL:
                         {
-                            moduleTypeString = string.Format("KL     {0}", this.MlkType);
+                            moduleTypeString = "KL    ";
                             break;
                         }
                     case ModuleType.MII:
                         {
-                            moduleTypeString = string.Format("MII5CH {0}", this.MlkType);
+                            moduleTypeString = "MII5CH";
                             break;
                         }
                     case ModuleType.PT303:
                         {
-                            moduleTypeString = string.Format("PT 303 {0}", this.MlkType);
+                            moduleTypeString ="PT303 ";
                             break;
                         }
                     case ModuleType.CLEAR:
                         {
-                            moduleTypeString = string.Format("Незвестное устройство{0}", MlkType);
+                            moduleTypeString = "Незвестное устройство{0}";
                             break;
                         }
                 }
@@ -316,7 +316,7 @@ namespace MRProg.Module
                     this.ModuleType = ModuleType.KL;
                     this.MlkType = moduleConfiguration[1];
                 }
-                if (moduleConfiguration[0] == "PT")
+                if (moduleConfiguration[0] == "PT303")
                 {
                     this.ModuleType = ModuleType.PT303;
                     this.MlkType = moduleConfiguration[1];
@@ -364,10 +364,12 @@ namespace MRProg.Module
                     this.ModuleType = ModuleType.ERROR;
                     return;
                 }
-                if (String.IsNullOrEmpty(str1) & (!str2.All(o => o == 0)) & String.IsNullOrEmpty(str3))
+                if ((str1.All(o => o == ' ') & (!str2.All(o => o == 0)) & (str3.All(o => o == ' ')))) ///010
                 {
                     this.State = ModuleStates.CLEAR;
                     this.ModuleType = ModuleType.CLEAR;
+                    ParseLoaderString(str2);
+                    return;
                 }
                 else
                 {
@@ -378,7 +380,7 @@ namespace MRProg.Module
                 this.ModuleTypeString = str3;
 
             }
-            catch
+            catch (Exception e)
             {
                 this.State = ModuleStates.NO_MODULE;
                 this.ModuleType = ModuleType.NONE;

@@ -34,15 +34,15 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this._fuzeLable = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this._toBootloaderButton = new MetroFramework.Controls.MetroButton();
-            this._toWorkStateButton = new MetroFramework.Controls.MetroButton();
+            this._clearButton = new System.Windows.Forms.Button();
+            this._toBootloaderButton = new System.Windows.Forms.Button();
+            this._chooseFile = new System.Windows.Forms.Button();
             this._progressBar = new System.Windows.Forms.ProgressBar();
             this._workProgramCheckFile = new System.Windows.Forms.CheckBox();
-            this._chooseFile = new MetroFramework.Controls.MetroButton();
-            this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this._openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this._moduleNameLable = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.openFileDialogDevInfo = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -96,51 +96,59 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox3.Controls.Add(this._clearButton);
             this.groupBox3.Controls.Add(this._toBootloaderButton);
-            this.groupBox3.Controls.Add(this._toWorkStateButton);
+            this.groupBox3.Controls.Add(this._chooseFile);
             this.groupBox3.Controls.Add(this._progressBar);
             this.groupBox3.Controls.Add(this._workProgramCheckFile);
-            this.groupBox3.Controls.Add(this._chooseFile);
-            this.groupBox3.Controls.Add(this.metroButton1);
             this.groupBox3.Location = new System.Drawing.Point(214, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(631, 81);
+            this.groupBox3.Size = new System.Drawing.Size(625, 72);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Рабочая программа";
             // 
+            // _clearButton
+            // 
+            this._clearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._clearButton.Location = new System.Drawing.Point(595, 44);
+            this._clearButton.Name = "_clearButton";
+            this._clearButton.Size = new System.Drawing.Size(24, 23);
+            this._clearButton.TabIndex = 10;
+            this._clearButton.Text = "C";
+            this._clearButton.UseVisualStyleBackColor = true;
+            this._clearButton.Click += new System.EventHandler(this._clearModuleButton_Click);
+            // 
             // _toBootloaderButton
             // 
             this._toBootloaderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._toBootloaderButton.Location = new System.Drawing.Point(574, 9);
+            this._toBootloaderButton.Enabled = false;
+            this._toBootloaderButton.Location = new System.Drawing.Point(595, 13);
             this._toBootloaderButton.Name = "_toBootloaderButton";
-            this._toBootloaderButton.Size = new System.Drawing.Size(24, 21);
-            this._toBootloaderButton.TabIndex = 6;
+            this._toBootloaderButton.Size = new System.Drawing.Size(24, 23);
+            this._toBootloaderButton.TabIndex = 8;
             this._toBootloaderButton.Text = "З";
-            this.toolTip1.SetToolTip(this._toBootloaderButton, "Перевод модуля в режим загрузчика");
-            this._toBootloaderButton.UseSelectable = true;
+            this._toBootloaderButton.UseVisualStyleBackColor = true;
             this._toBootloaderButton.Click += new System.EventHandler(this._toBootloaderButton_Click);
             // 
-            // _toWorkStateButton
+            // _chooseFile
             // 
-            this._toWorkStateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._toWorkStateButton.Location = new System.Drawing.Point(601, 9);
-            this._toWorkStateButton.Name = "_toWorkStateButton";
-            this._toWorkStateButton.Size = new System.Drawing.Size(24, 21);
-            this._toWorkStateButton.TabIndex = 5;
-            this._toWorkStateButton.Text = "Р";
-            this.toolTip1.SetToolTip(this._toWorkStateButton, "Перевод модуля в рабочий режим");
-            this._toWorkStateButton.UseSelectable = true;
-            this._toWorkStateButton.Click += new System.EventHandler(this._toWorkStateButton_Click);
+            this._chooseFile.Location = new System.Drawing.Point(8, 17);
+            this._chooseFile.Name = "_chooseFile";
+            this._chooseFile.Size = new System.Drawing.Size(141, 23);
+            this._chooseFile.TabIndex = 7;
+            this._chooseFile.Text = "Выбрать файл";
+            this._chooseFile.UseVisualStyleBackColor = true;
+            this._chooseFile.Click += new System.EventHandler(this._chooseFile_Click);
             // 
             // _progressBar
             // 
             this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this._progressBar.BackColor = System.Drawing.SystemColors.Control;
-            this._progressBar.Location = new System.Drawing.Point(8, 47);
+            this._progressBar.Location = new System.Drawing.Point(8, 44);
             this._progressBar.Name = "_progressBar";
-            this._progressBar.Size = new System.Drawing.Size(588, 23);
+            this._progressBar.Size = new System.Drawing.Size(582, 23);
             this._progressBar.TabIndex = 4;
             // 
             // _workProgramCheckFile
@@ -151,26 +159,6 @@
             this._workProgramCheckFile.Size = new System.Drawing.Size(15, 14);
             this._workProgramCheckFile.TabIndex = 3;
             this._workProgramCheckFile.UseVisualStyleBackColor = true;
-            // 
-            // _chooseFile
-            // 
-            this._chooseFile.Location = new System.Drawing.Point(7, 19);
-            this._chooseFile.Name = "_chooseFile";
-            this._chooseFile.Size = new System.Drawing.Size(141, 23);
-            this._chooseFile.TabIndex = 2;
-            this._chooseFile.Text = "Выбрать файл";
-            this._chooseFile.UseSelectable = true;
-            this._chooseFile.Click += new System.EventHandler(this._chooseFile_Click);
-            // 
-            // metroButton1
-            // 
-            this.metroButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroButton1.Location = new System.Drawing.Point(601, 48);
-            this.metroButton1.Name = "metroButton1";
-            this.metroButton1.Size = new System.Drawing.Size(24, 21);
-            this.metroButton1.TabIndex = 1;
-            this.metroButton1.Text = "С";
-            this.metroButton1.UseSelectable = true;
             // 
             // _openFileDialog
             // 
@@ -184,6 +172,11 @@
             this._moduleNameLable.Size = new System.Drawing.Size(117, 13);
             this._moduleNameLable.TabIndex = 4;
             this._moduleNameLable.Text = "Модуль не определен";
+            // 
+            // openFileDialogDevInfo
+            // 
+            this.openFileDialogDevInfo.Filter = "Файл типа модуля (*.devInfo)|*.devInfo";
+            this.openFileDialogDevInfo.Title = "Выбор файла типа модуля";
             // 
             // MrModuleControl
             // 
@@ -212,16 +205,16 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
-        private MetroFramework.Controls.MetroButton _chooseFile;
-        private MetroFramework.Controls.MetroButton metroButton1;
         private System.Windows.Forms.OpenFileDialog _openFileDialog;
         private System.Windows.Forms.CheckBox _workProgramCheckFile;
         private System.Windows.Forms.Label _moduleNameLable;
         private System.Windows.Forms.Label _versionLabel;
         private System.Windows.Forms.Label _fuzeLable;
         private System.Windows.Forms.ProgressBar _progressBar;
-        private MetroFramework.Controls.MetroButton _toBootloaderButton;
         private System.Windows.Forms.ToolTip toolTip1;
-        private MetroFramework.Controls.MetroButton _toWorkStateButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialogDevInfo;
+        private System.Windows.Forms.Button _clearButton;
+        private System.Windows.Forms.Button _chooseFile;
+        private System.Windows.Forms.Button _toBootloaderButton;
     }
 }
